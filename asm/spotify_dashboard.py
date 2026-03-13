@@ -1,8 +1,8 @@
-import streamlit as st
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-import pandas as pd
-import plotly.express as px
+import streamlit as st #librería streamlit para crear la interfaz de usuario 
+import spotipy #librería para interactuar con la API de Spotify
+from spotipy.oauth2 import SpotifyOAuth #librería para manejar la autenticación con Spotify usando OAuth2
+import pandas as pd #librería para manejar datos en formato de tablas (DataFrames)
+import plotly.express as px #librería conectada a streamlit para crear gráficos interactivos
 
 # ---------- CONFIGURACIÓN ----------
 st.set_page_config(
@@ -44,25 +44,25 @@ if st.button("Conectar con Spotify"):
     st.subheader("🎧 Tus canciones más escuchadas del mes")
 
 
-
-
-# obtener top canciones del último mes
+# obtener top canciones del último mes, limitado a 10, usando la función current_user_top_tracks 
     top_tracks = sp.current_user_top_tracks(limit=10, time_range="short_term")
 
+    #crear listas para almacenar los nombres de las canciones y sus posiciones en el ranking
     canciones = []
     ranking = []
-
+    #iterar sobre las canciones obtenidas y agregar sus nombres a la lista de canciones y sus posiciones al ranking
     for i, track in enumerate(top_tracks['items'], start=1):
         canciones.append(track['name'])
         ranking.append(i)
-
+    #crear un DataFrame de pandas con las canciones y sus rankings para facilitar la visualización
     df_tracks = pd.DataFrame({
     "Canción": canciones,
     "Ranking": ranking
     })
 
+    #ordenar el DataFrame por ranking de forma descendente para mostrar la canción más escuchada en la parte superior
     df_tracks = df_tracks.sort_values(by="Ranking", ascending=False)
-
+    #crear un gráfico de barras horizontal usando plotly
     fig = px.bar(
         df_tracks,
         x="Ranking",
@@ -71,7 +71,7 @@ if st.button("Conectar con Spotify"):
         color="Ranking",
         color_continuous_scale="Greens"
     )
-
+    #personalizar el diseño del gráfico para que se adapte al tema oscuro de Streamlit y agregar títulos a los ejes
     fig.update_layout(
         template="plotly_dark",
         title="🎧 Tus canciones más escuchadas del mes",
@@ -80,3 +80,4 @@ if st.button("Conectar con Spotify"):
     )
 
     st.plotly_chart(fig, use_container_width=True)
+    #muestra el graficco de barras con las canciones más escuchadas del mes, usando plotly
