@@ -20,8 +20,8 @@ st.write("Descubre tus artistas más escuchados")
 if st.button("Conectar con Spotify"):
 #credenciales para conectar con la API de Spotify
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-        client_id="18c9f2493f8e4bc2851dc9b8632c202a",
-        client_secret="70e718f19b804805b835a7dce9719842",
+        client_id="",
+        client_secret="",
         redirect_uri="http://127.0.0.1:8501/",
         scope="user-top-read"
     ))
