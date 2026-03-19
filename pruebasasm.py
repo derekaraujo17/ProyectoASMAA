@@ -171,7 +171,6 @@ def calcularVibra(listaTextosGeneros):
 feelingMensual["vibraDominante"] = feelingMensual["generos"].apply(calcularVibra)
 resumenFeeling = feelingMensual[["mesReproduccion","vibraDominante"]]
 
-# --- MENÚ INTERACTIVO EN CONSOLA ---
 while True:
     print("1. Tiempo de escucha mensual")
     print("2. Top 5 Artistas por mes")
