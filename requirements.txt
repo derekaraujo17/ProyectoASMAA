@@ -1,10 +1,12 @@
+#librerías EXTERNAS A PYTHON usadas en el proyecto
+
 #variables de entorno y de seguridad
 python-dotenv
 #Manejo y análisis de datos
 pandas
 #Apis
 spotipy
-pyllast
+pylast
 #visualización en la consola (temporal)
 tabulate
 #interfaz web
