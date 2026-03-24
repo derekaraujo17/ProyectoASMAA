@@ -10,4 +10,4 @@ def mostrar_pantalla_pibble():
         st.session_state["pantalla_actual"] = "seleccion"
         #obligamos a la página a recargarse inmediatamente para que el main.py lea la nueva memoria y cambie de pantalla
         #aquí podrían agregar una animación de carga si es necesaria
-        st.reurn()
+        st.rerun()
