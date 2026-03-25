@@ -38,6 +38,6 @@ def mostrar_pantalla_pibble():
 #HAGAN QUE LA PANZA DE PIBBLE ESTÉ SUCIA
 #CUANDO EL USUARIO PASE EL MOUSE/DEDO POR SU PANZA, ESTA SE LIMPIARÁ
 #CUANDO ESTÉ LIMPIA, SE DESCUBRIRÁ EL BOTÓN PARA LA AUTENTICACIÓN
-#USEN HTML, CSS Y JS SI ES NECESARIO""")
+#USEN HTML, CSS Y JAVASCRIPT SI ES NECESARIO""")
     #botón temporal
     st.link_button("Botón temporarl para iniciar sesión con spotify", urlAutorizacion)
