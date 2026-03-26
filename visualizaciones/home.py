@@ -40,4 +40,4 @@ def mostrar_pantalla_pibble():
 #CUANDO ESTÉ LIMPIA, SE DESCUBRIRÁ EL BOTÓN PARA LA AUTENTICACIÓN
 #USEN HTML, CSS Y JAVASCRIPT SI ES NECESARIO""")
     #botón temporal
-    st.markdown(f'<a href="{urlAutorizacion}" target="_self">Iniciar sesión con Spotify</a>', unsafe_allow_html=True)
+    st.markdown(f'<a href="{urlAutorizacion}" target="_top">Iniciar sesión con Spotify</a>', unsafe_allow_html=True)

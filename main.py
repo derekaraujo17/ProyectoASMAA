@@ -21,6 +21,6 @@ elif st.session_state["pantalla_actual"] == "seleccion":
 elif st.session_state["pantalla_actual"] == "dashboardjson":
     st.title("dashboard de json")
 #cuando creemos el dashboard de oauth
-elif st.session_state["pantalla_actual"] == "oauth":
+elif st.session_state["pantalla_actual"] == "dashboardoauth":
     st.title("dashboard de oauth")
 
