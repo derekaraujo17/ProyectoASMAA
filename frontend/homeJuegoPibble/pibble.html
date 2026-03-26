@@ -1,0 +1,20 @@
+<!--
+MOLDE DEL JUEGO DE PIBBLE.
+Aquí va la estructura de pibble y la "panza sucia" (etiquetas div, img).
+OJOOOO: El enlace a Spotify que aparecerá al final DEBE tener el atributo target="_top" (ej. <a href="..." target="_top">) para que funcione correctamente y salga del iframe.
+OJOOOO2: cuidado con la indentación, si streamlit detecta 4 espacios o más de indentación en un código, lo mostrará
+como un mensaje en lugar de hacer que funcione como html
+van a tener que hacer que el botón desaparezca hasta que la panza de pibble esté limpia (con display: none)
+y que cambie a (display:block) cuando esté listo
+quiten las etiquetas <link> y <script src...> de su HTML, mi Python ya se encarga de unirlos por detrás. 
+Y para la foto de pibble, súbanla a internet (a Discord, GitHub, o Imgur) 
+y pongan ese enlace directo de internet en el src="..." para que Streamlit pueda mostrarla
+-->
+<!DOCTYPE html>
+<div id="contenedor-pibble">
+<img src="pibble_sucio.png" id="panza" alt="Pibble Sucio">
+</div>
+
+<a href="urlspotiaqui" target="_self" id="boton-login" style="display: block;">
+Iniciar sesión con Spotify
+</a>

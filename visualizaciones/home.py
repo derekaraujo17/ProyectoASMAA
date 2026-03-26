@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from spotipy.oauth2 import SpotifyOAuth #lo que nos dará el inicio de sesión
+import streamlit.components.v1 as components
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -34,10 +35,26 @@ def mostrar_pantalla_pibble():
         st.rerun()
     #la primera vez que entra un usuario
     urlAutorizacion = spotifyOauth.get_authorize_url()
-    st.write("""#CONVIERTAN EL MOUSE EN UN ESTROPAJO
-#HAGAN QUE LA PANZA DE PIBBLE ESTÉ SUCIA
-#CUANDO EL USUARIO PASE EL MOUSE/DEDO POR SU PANZA, ESTA SE LIMPIARÁ
-#CUANDO ESTÉ LIMPIA, SE DESCUBRIRÁ EL BOTÓN PARA LA AUTENTICACIÓN
-#USEN HTML, CSS Y JAVASCRIPT SI ES NECESARIO""")
     #botón temporal
-    st.markdown(f'<a href="{urlAutorizacion}" target="_top">Iniciar sesión con Spotify</a>', unsafe_allow_html=True)
+    #st.markdown(f'<a href="{urlAutorizacion}" target="_top">Iniciar sesión con Spotify</a>', unsafe_allow_html=True)
+    #CONEXIÓN CON EL FRONTEND
+    rutaHtml = "frontend/homeJuegoPibble/pibble.html"
+    rutaCss = "frontend/homeJuegoPibble/pibble.css"
+    rutaJs = "frontend/homeJuegoPibble/pibble.js"
+    try:
+        with open(rutaHtml, "r", encoding="utf-8") as f:
+            codigoHtml = f.read()
+        with open(rutaCss, "r", encoding="utf-8") as f:
+            codigoCss = f.read()
+        with open(rutaJs, "r", encoding="utf-8") as f:
+            codigoJs = f.read()
+        htmlFinal=codigoHtml.replace("urlspotiaqui",urlAutorizacion)
+        paqueteCompleto = f"""
+        <style>{codigoCss}</style>
+        {htmlFinal}
+        <script>{codigoJs}</script>
+        """
+        
+        st.markdown(paqueteCompleto, unsafe_allow_html=True)
+    except:
+        st.warning(f"Esperando el archivo frontend")
