@@ -1,12 +1,21 @@
 import streamlit as st
 
 def mostrar_pantalla_botones():
+    #conexión con css
+    rutaCssSeleccion="frontend/seleccion.css"
+    rutaCssGlobal="frontend/estilosGlobales.css"
+    try:
+        with open(rutaCssSeleccion, "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("Esperando el archivo frontend")
     st.title("Elegir la opción de los datos")
 
     col1, col2 = st.columns(2)
 
     with col1:
         #botón json
+        st.markdown("<h3 class='titulo-columna'>Analizar historial json</h3>",unsafe_allow_html=True)
         archivosSubidos = st.file_uploader("Sube tus archivos JSON", accept_multiple_files=True, type=["json"])
         def cargarArchivos():
             archivosValidos=[]
@@ -23,6 +32,7 @@ def mostrar_pantalla_botones():
                 st.rerun()
     with col2:
         #botón oauth
+        st.markdown("<h3 class='titulo-columna'>Conectar con spotify</h3>",unsafe_allow_html=True)
         if st.button("OAuth"):
             st.session_state["pantalla_actual"] = "dashboardoauth"
             st.rerun()

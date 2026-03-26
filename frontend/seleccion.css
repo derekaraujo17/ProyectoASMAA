@@ -2,4 +2,13 @@
 - Darle estilo al cuadro de subir archivos (st.file_uploader).
 - Personalizar los botones de "Analizar mis archivos" y "OAuth".
 - etc.
+aquí dependeremos ahora sí de los archivos nativos de streamlit (revisar la pagina con f12), por lo que tienen que hacer las implementaciones
+con el data-testid
+Para cambiar el cuadro de subir archivos, su CSS debe ser: [data-testid="stFileUploader"] { ... }
+
+Para cambiar los botones de Streamlit, su CSS debe ser: [data-testid="stBaseButton-secondary"] { ... }
+
+Para cambiar los textos que agregué con st.markdown, pueden usar la clase que les puse: .titulo-columna { ... }
+esto es un poco de lo que vi quepodrían hacer, pero de igual forma ustedes investíguenlo
+
 */
