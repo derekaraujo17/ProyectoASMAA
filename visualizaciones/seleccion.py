@@ -34,6 +34,7 @@ def mostrar_pantalla_botones():
         if len(jsonValidos)>=1:
             if st.button("Analizar mis archivos"):
                 st.session_state["jsonValidos"] = jsonValidos
+                st.session_state["motor"] = "motorjson"
                 st.session_state["pantalla_actual"] = "pantallaCarga"
                 st.rerun()
     with col2:
@@ -41,5 +42,6 @@ def mostrar_pantalla_botones():
         st.markdown("<h3 class='titulo-columna'>Conectar con spotify</h3>",unsafe_allow_html=True)
         st.markdown("<img src='fotobotonoauth' class='foto-seleccion-oauth'>",unsafe_allow_html=True)
         if st.button("Datos actuales"):
-            st.session_state["pantalla_actual"] = "dashboardoauth"
+            st.session_state["motor"] = "motoroauth"
+            st.session_state["pantalla_actual"] = "pantallaCarga"
             st.rerun()
