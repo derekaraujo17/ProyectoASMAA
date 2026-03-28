@@ -5,6 +5,11 @@ def mostrar_pantalla_botones():
     rutaCssSeleccion="frontend/seleccion.css"
     rutaCssGlobal="frontend/estilosGlobales.css"
     try:
+        with open(rutaCssGlobal,"r",encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass
+    try:
         with open(rutaCssSeleccion, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
     except FileNotFoundError:
@@ -16,6 +21,7 @@ def mostrar_pantalla_botones():
     with col1:
         #botón json
         st.markdown("<h3 class='titulo-columna'>Analizar historial json</h3>",unsafe_allow_html=True)
+        st.markdown("<img src='fotobotonjson' class='foto-seleccion-json'>",unsafe_allow_html=True)
         archivosSubidos = st.file_uploader("Sube tus archivos JSON", accept_multiple_files=True, type=["json"])
         def cargarArchivos():
             archivosValidos=[]
@@ -33,6 +39,7 @@ def mostrar_pantalla_botones():
     with col2:
         #botón oauth
         st.markdown("<h3 class='titulo-columna'>Conectar con spotify</h3>",unsafe_allow_html=True)
-        if st.button("OAuth"):
+        st.markdown("<img src='fotobotonoauth' class='foto-seleccion-oauth'>",unsafe_allow_html=True)
+        if st.button("Datos actuales"):
             st.session_state["pantalla_actual"] = "dashboardoauth"
             st.rerun()
