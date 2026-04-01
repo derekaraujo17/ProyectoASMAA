@@ -8,7 +8,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tabulate import tabulate
 import os
-from dotenv import load_dotenvkjkj
+from dotenv import load_dotenv
 
 load_dotenv()
 

@@ -1,5 +1,5 @@
 import streamlit as st
-from visualizaciones import home, seleccion, dashboardjson
+from visualizaciones import home, seleccion, dashboardjson, dashboardoauth, pantallaCarga
 
 #ESTUDIEN EL CONCEPTO BÁSICO DEL BACKEND WEB EN STREAMLIT: LA MEMORIA SE SESIÓN (st.session_state)
 
@@ -17,6 +17,9 @@ if st.session_state["pantalla_actual"] == "home":
 
 elif st.session_state["pantalla_actual"] == "seleccion":
     seleccion.mostrar_pantalla_botones()
+
+elif st.session_state["pantalla_actual"] == "pantallaCarga":
+    pantallaCarga.mostrar_pantalla_carga()
 
 elif st.session_state["pantalla_actual"] == "dashboardjson":
     st.title("dashboard de json")
