@@ -3,17 +3,10 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pylast
 from collections import Counter
-from pathlib import Path
-import tkinter as tk
-from tkinter import filedialog
-from tabulate import tabulate
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-pd.set_option('display.width', 1000)     
-pd.set_option('display.max_colwidth', 35)
 
 #credenciales de spotify
 clientId = os.getenv("SPOTIFY_CLIENT_ID")
@@ -26,98 +19,6 @@ apiKey = os.getenv("LASTFM_API_KEY")
 apiSecret = os.getenv("LASTFM_API_SECRET")
 network = pylast.LastFMNetwork(api_key=apiKey, api_secret=apiSecret)
 
-#MÓDULO 1: "Historial completo". Utiliza datos json
-
-def cargArchivos(ruta_carpeta):
-    #convertimor la ruta de acceso en un objeto Path
-    carpeta = Path(ruta_carpeta)
-    #buscamos los archivos necesarios
-    archivosJson = list(carpeta.glob("*StreamingHistory_music*.json"))
-    #devolvemos los archivos necesarios
-    return archivosJson
-
-root = tk.Tk()
-root.withdraw()
-rutaElegida = filedialog.askdirectory(title="Selecciona la carpeta de los datos de spotify")
-archivosEncontrados = cargArchivos(rutaElegida)
-
-listadf = []
-for archivo in archivosEncontrados:
-    dfTemporal = pd.read_json(archivo)
-    listadf.append(dfTemporal)
-dfSpotify = pd.concat(listadf, ignore_index=True)
-
-#limpieza de canciones que no sirven
-umbralMs = 30000 #umbral de tiempo mínimo de reproducción
-filasAntes = len(dfSpotify)
-dfLimpio = dfSpotify[dfSpotify["msPlayed"]>=umbralMs]
-filasDespues = len(dfLimpio)
-print(f"Líneas originales: {filasAntes}")
-print(f"Líneas después de limpieza: {filasDespues}")
-print(f"Canciones eliminadas: {filasAntes - filasDespues}")
-
-#se hace una copia del df para no modificar el original
-dfLimpio = dfLimpio.copy()
-#creación de columnas dentro de este df copia para obtener mes, día y hora de reproducción, usando la columna "endTime" como referencia
-dfLimpio["endTime"] = pd.to_datetime(dfLimpio["endTime"])
-dfLimpio["mesReproduccion"] = dfLimpio["endTime"].dt.month
-dfLimpio["horaReproduccion"] = dfLimpio["endTime"].dt.hour
-dfLimpio["diaSemana"] = dfLimpio["endTime"].dt.day_name()
-dfLimpio["semanaReproduccion"] = dfLimpio["endTime"].dt.isocalendar().week
-dfLimpio["msPlayed"] = dfLimpio["msPlayed"]/60000
-dfLimpio = dfLimpio.rename(columns={"msPlayed":"minutosReproducidos"})
-dfLimpio["minutosReproducidos"]=dfLimpio["minutosReproducidos"].round(0).astype(int)
-
-#TIEMPO DE ESCUCHA MENSUAL
-#agrupación por mes de reproducción y suma del tiempo de reproducción, obteniendo así el total de escucha por mes
-dfTiempoMensual = dfLimpio.groupby("mesReproduccion")["minutosReproducidos"].sum().reset_index() #esto regresa una serie donde el índice será el mes, y el valor es la suma de los ms
-
-#ARTISTAS MÁS ESCUCHADOS
-#agrupación por artistas más escuchados
-dfArtistasMensual = dfLimpio.groupby(["mesReproduccion","artistName"])["minutosReproducidos"].sum().reset_index()
-dfArtistasMensual =dfArtistasMensual.sort_values(by=["mesReproduccion","minutosReproducidos"],ascending=[True,False])
-top5Artistas =dfArtistasMensual.groupby("mesReproduccion").head()
-
-#CANCIONES MÁS ESCUCHADAS
-dfCancionesMensual = dfLimpio.groupby(["mesReproduccion","trackName","artistName"]).agg(
-    totalMinutos = ("minutosReproducidos","sum"),
-    cantidadEscuchas = ("trackName","count")
-).reset_index()
-dfCancionesMensual=dfCancionesMensual.sort_values(by=["mesReproduccion","totalMinutos"],ascending=[True,False])
-top5Canciones=dfCancionesMensual.groupby("mesReproduccion").head()
-
-#RESUMEN SEMANAL
-dfCancionesSemanal = dfLimpio.groupby(["semanaReproduccion","trackName","artistName"]).agg(
-    totalMinutos = ("minutosReproducidos","sum"),
-    cantidadEscuchas = ("trackName","count")
-).reset_index()
-dfCancionesSemanal = dfCancionesSemanal.sort_values(by=["semanaReproduccion","totalMinutos"],ascending=[True,False])
-resumenSemanal = dfCancionesSemanal.groupby("semanaReproduccion").head()
-
-#FEELING MENSUAL
-memoriaGeneros={}
-top20CancionesMensual = dfCancionesMensual.groupby("mesReproduccion").head(20).copy()
-top20CancionesMensual["generos"] = ""
-for indice, fila in top20CancionesMensual.iterrows():
-    artista=fila["artistName"]
-    #memoria para evitar bloqueos
-    if artista in memoriaGeneros:
-        top20CancionesMensual.at[indice,"generos"] = memoriaGeneros[artista]
-        continue
-    try:
-        artista_lastfm = network.get_artist(artista)
-        top_tags = artista_lastfm.get_top_tags(limit=5)
-        listaGeneros = [tag.item.get_name().lower() for tag in top_tags]
-        textoGeneros = ", ".join(listaGeneros) if listaGeneros else "sin clasificar"
-        top20CancionesMensual.at[indice,"generos"] = textoGeneros
-        memoriaGeneros[artista] = textoGeneros
-    except Exception as e:
-        top20CancionesMensual.at[indice,"generos"] = "no encontrado"
-        memoriaGeneros[artista] = "no encontrado"
-feelingMensual = top20CancionesMensual.groupby("mesReproduccion")[["generos"]].agg(list).reset_index()
-
-#agrupación de los géneros
-#diccionario que tomará los géneros necesarios para cada tipo de etiqueta
 diccionarioVibras = {
     # --- CULTURA HIP-HOP Y CALLE ---
     "🎤 Rap & Hip-Hop": ["rap", "hip-hop", "hip hop", "boom bap", "underground hip-hop", "conscious hip hop", "east coast", "west coast"],
@@ -168,42 +69,119 @@ def calcularVibra(listaTextosGeneros):
     vibraGanadora = max(puntuacion, key=puntuacion.get)
     #vibra neutral
     if puntuacion[vibraGanadora] == 0:
-        return "Variado"
+        return "🔀 Variado"
     
     return vibraGanadora
 
-feelingMensual["vibraDominante"] = feelingMensual["generos"].apply(calcularVibra)
-resumenFeeling = feelingMensual[["mesReproduccion","vibraDominante"]]
+#MÓDULO 1: "Historial completo". Utiliza datos json
 
-# --- MENÚ INTERACTIVO EN CONSOLA ---
-while True:
-    print("1. Tiempo de escucha mensual")
-    print("2. Top 5 Artistas por mes")
-    print("3. Top 5 Canciones por mes")
-    print("4. Resumen Semanal")
-    print("5. Feeling / Vibra Mensual")
-    print("6. Salir")
+def procesarDatosJson(archivosSubidos):
+    listadf = []
+    mesesEspañol = {
+        1:"Enero", 2:"Febrero", 3:"Marzo",4:"Abril",5:"Mayo",6:"Junio",
+        7:"Julio",8:"Agosto",9:"Septiembre",10:"Octubre",11:"Noviembre",12:"Diciembre"
+    }
+    for archivo in archivosSubidos:
+        dfTemporal = pd.read_json(archivo)
+        listadf.append(dfTemporal)
+    dfSpotify = pd.concat(listadf, ignore_index=True)
+
+    #limpieza de canciones que no sirven
+    umbralMs = 30000 #umbral de tiempo mínimo de reproducción
+    filasAntes = len(dfSpotify)
+    dfLimpio = dfSpotify[dfSpotify["msPlayed"]>=umbralMs]
+    filasDespues = len(dfLimpio)
+
+    #se hace una copia del df para no modificar el original
+    dfLimpio = dfLimpio.copy()
+    #creación de columnas dentro de este df copia para obtener mes, día y hora de reproducción, usando la columna "endTime" como referencia
+    dfLimpio["endTime"] = pd.to_datetime(dfLimpio["endTime"])
+    mes = dfLimpio["endTime"].dt.month.map(mesesEspañol)
+    año = dfLimpio["endTime"].dt.year.astype(str)
+    dfLimpio["añoMesReproduccion"] = (mes + " " + año) 
+    dfLimpio["semanaReproduccion"] = dfLimpio["endTime"].dt.strftime('%Y-%V')
+    dfLimpio["msPlayed"] = dfLimpio["msPlayed"]/60000
+    dfLimpio = dfLimpio.rename(columns={"msPlayed":"minutosReproducidos"})
+    dfLimpio["minutosReproducidos"]=dfLimpio["minutosReproducidos"].round(0).astype(int)
+
+    #TIEMPO DE ESCUCHA MENSUAL
+    #agrupación por mes de reproducción y suma del tiempo de reproducción, obteniendo así el total de escucha por mes
+    dfTiempoMensual = dfLimpio.groupby("añoMesReproduccion")["minutosReproducidos"].sum().reset_index() #esto regresa una serie donde el índice será el mes, y el valor es la suma de los ms
+    #promedio de tiempo por mes
+    maximoMinutos = dfTiempoMensual["minutosReproducidos"].max()
+    dfTiempoMensual["porcentajeReloj"] = dfTiempoMensual["minutosReproducidos"]/maximoMinutos
     
-    opcion = input("\nElige una opción (1-6): ")
+    #ARTISTAS MÁS ESCUCHADOS
+    #agrupación por artistas más escuchados
+    dfArtistasMensual = dfLimpio.groupby(["añoMesReproduccion","artistName"])["minutosReproducidos"].sum().reset_index()
+    dfArtistasMensual =dfArtistasMensual.sort_values(by=["añoMesReproduccion","minutosReproducidos"],ascending=[True,False])
+    top5Artistas =dfArtistasMensual.groupby("añoMesReproduccion").head()
+
+    #CANCIONES MÁS ESCUCHADAS
+    dfCancionesMensual = dfLimpio.groupby(["añoMesReproduccion","trackName","artistName"]).agg(
+        totalMinutos = ("minutosReproducidos","sum"),
+        cantidadEscuchas = ("trackName","count")
+    ).reset_index()
+    dfCancionesMensual=dfCancionesMensual.sort_values(by=["añoMesReproduccion","totalMinutos"],ascending=[True,False])
+    top5Canciones=dfCancionesMensual.groupby("añoMesReproduccion").head()
+
+    #RESUMEN SEMANAL
+    dfCancionesSemanal = dfLimpio.groupby(["semanaReproduccion","trackName","artistName"]).agg(
+        totalMinutos = ("minutosReproducidos","sum"),
+        cantidadEscuchas = ("trackName","count")
+    ).reset_index()
+    dfCancionesSemanal = dfCancionesSemanal.sort_values(by=["semanaReproduccion","totalMinutos"],ascending=[True,False])
+    resumenSemanal = dfCancionesSemanal.groupby("semanaReproduccion").head()
+
+    #FEELING MENSUAL
+    memoriaGeneros={}
+    top20CancionesMensual = dfCancionesMensual.groupby("añoMesReproduccion").head(20).copy()
+    top20CancionesMensual["generos"] = ""
+    for indice, fila in top20CancionesMensual.iterrows():
+        artista=fila["artistName"]
+        #memoria para evitar bloqueos
+        if artista in memoriaGeneros:
+            top20CancionesMensual.at[indice,"generos"] = memoriaGeneros[artista]
+            continue
+        try:
+            artista_lastfm = network.get_artist(artista)
+            top_tags = artista_lastfm.get_top_tags(limit=5)
+            listaGeneros = [tag.item.get_name().lower() for tag in top_tags]
+            textoGeneros = ", ".join(listaGeneros) if listaGeneros else "sin clasificar"
+            top20CancionesMensual.at[indice,"generos"] = textoGeneros
+            memoriaGeneros[artista] = textoGeneros
+        except Exception as e:
+            top20CancionesMensual.at[indice,"generos"] = "no encontrado"
+            memoriaGeneros[artista] = "no encontrado"
+    feelingMensual = top20CancionesMensual.groupby("añoMesReproduccion")[["generos"]].agg(list).reset_index()
+
+    feelingMensual["vibraDominante"] = feelingMensual["generos"].apply(calcularVibra)
+    feelingMensual["emoji"] = feelingMensual["vibraDominante"].str[0]
+    resumenFeeling = feelingMensual[["añoMesReproduccion","vibraDominante","emoji"]]
+
+    #canciones top 1
+    cancionesTop1 = top5Canciones.groupby("añoMesReproduccion").head(1).copy()
+    cancionesTop1["urlPortada"] = ""
+    for indice, fila in cancionesTop1.iterrows():
+        artista1 = fila["artistName"]
+        cancion1 = fila["trackName"]
+        try:
+            resultado = sp.search(q=f"track:{cancion1} artist:{artista1}", type="track",limit=1)
+            urlPortada = resultado['tracks']['items'][0]['album']['images'][0]['url']
+            cancionesTop1.at[indice,"urlPortada"] = urlPortada
+        except Exception as e:
+            cancionesTop1.at[indice,"urlPortada"] = "sin imagen"
     
-    match opcion:
-        case "1":
-            print("\n--- TIEMPO DE ESCUCHA MENSUAL ---")
-            print(tabulate(dfTiempoMensual, headers='keys', tablefmt='psql', showindex=False))
-        case "2":
-            print("\n--- TOP 5 ARTISTAS POR MES ---")
-            print(tabulate(top5Artistas, headers='keys', tablefmt='psql', showindex=False))
-        case "3":
-            print("\n--- TOP 5 CANCIONES POR MES ---")
-            print(tabulate(top5Canciones, headers='keys', tablefmt='psql', showindex=False))
-        case "4":
-            print("\n--- RESUMEN SEMANAL ---")
-            print(tabulate(resumenSemanal, headers='keys', tablefmt='psql', showindex=False, maxcolwidths=35))
-        case "5":
-            print("\n--- FEELING / VIBRA MENSUAL ---")
-            print(tabulate(resumenFeeling, headers='keys', tablefmt='psql', showindex=False))
-        case "6":
-            print("\nSaliendo del programa")
-            break
-        case _:
-            print("\nOpción no válida")
+    #artistas top 1
+    artistasTop1 = top5Artistas.groupby("añoMesReproduccion").head(1).copy()
+    artistasTop1["urlFoto"] = ""
+    for indice, fila in artistasTop1.iterrows():
+        artista1 = fila["artistName"]
+        try:
+            resultado = sp.search(q=f"artist:{artista1}", type="artist",limit=1)
+            urlFoto = resultado['artists']['items'][0]['images'][0]['url']
+            artistasTop1.at[indice,"urlFoto"] = urlFoto
+        except Exception as e:
+            artistasTop1.at[indice,"urlFoto"] = "sin imagen"
+
+    return dfTiempoMensual, top5Artistas, top5Canciones, resumenSemanal, resumenFeeling, cancionesTop1, artistasTop1
