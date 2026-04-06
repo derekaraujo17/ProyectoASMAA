@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import sqlite3
 from datetime import datetime, timedelta
 
-
 load_dotenv()
 
 #credenciales de spotify

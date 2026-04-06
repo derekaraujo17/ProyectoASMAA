@@ -5,8 +5,7 @@ import streamlit.components.v1 as components
 from dotenv import load_dotenv
 from visualizaciones.header import render_header
 
-load_dotenv()
-#ENTREN A SPOTIFY FOR DEVELOPERS Y CAMBIÉN EL PARÁMETRO "Redirect URIs" por : http://127.0.0.1:8501
+#load_dotenv()
 spotifyOauth=SpotifyOAuth(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
