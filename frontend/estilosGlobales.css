@@ -38,7 +38,7 @@ html, body, [class*="css"] {
 
 /* Ajustar contenido */
 .block-container {
-    padding-top: 1rem;
+    padding-top: 6rem !important;
     padding-bottom: 1rem;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -56,15 +56,17 @@ html, body, [class*="css"] {
 }
 /* HEADER */
 .custom-header {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 999;
+    left: 0;
+    width: 100%; 
+    z-index: 99999; 
 
     display: flex;
     align-items: center;
     gap: 15px;
 
-    padding: 15px 30px;
+    padding: 10px 30px; 
     background-color: #0d001a;
 
     border-bottom: 1px solid var(--primary-color);

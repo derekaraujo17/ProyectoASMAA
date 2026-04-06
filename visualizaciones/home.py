@@ -3,6 +3,7 @@ import os
 from spotipy.oauth2 import SpotifyOAuth #lo que nos dará el inicio de sesión
 import streamlit.components.v1 as components
 from dotenv import load_dotenv
+from visualizaciones.header import render_header
 
 load_dotenv()
 #ENTREN A SPOTIFY FOR DEVELOPERS Y CAMBIÉN EL PARÁMETRO "Redirect URIs" por : http://127.0.0.1:8501
@@ -14,6 +15,14 @@ spotifyOauth=SpotifyOAuth(
 )
 
 def mostrar_pantalla_pibble():
+    rutaCssGlobal = "frontend/estilosglobales.css"
+    try: 
+        with open(rutaCssGlobal, "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+    except FileNotFoundError:
+        pass
+    
+    render_header()
     st.title("Spibblepy")
     #después de que spotify apruebe el acceso, devuelve al usuario a la app poniendo un parámetro "?code="
     #cuando eso ocurre, detectamos la palabra, y si la detectamos, sabemos que el usuario ya se autenticó
