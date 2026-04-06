@@ -211,3 +211,6 @@ pruebasasm.py
 
 #bases de datos
 spotifyCache.db
+
+#configuraciones locales del editor
+.vscode/
