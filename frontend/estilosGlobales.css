@@ -1,6 +1,99 @@
-/* AQUÍ VA EL DISEÑO GENERAL DE STREAMLIT.
-- Cambiar el color de fondo de toda la aplicación.
-- Definir la tipografía principal.
-- Modificar estilos de elementos nativos que se repiten (ej. usar selectores como [data-testid="stButton"] para todos los botones genéricos).
-- etc.
-*/
+/*Ocultar header*/
+[data-testid="stHeader"] {
+    display: none;
+}
+/* Quitar botón de menú (los tres puntitos) */
+[data-testid="stToolbar"] {
+    display: none;
+}
+/* Ocultar footer */
+footer {
+    visibility: hidden;
+}
+[data-testid="stFooter"]{
+    display: none;
+}
+/* Tipografía global */
+html, body, [class*="css"] {
+    font-family: 'Circular Std', sans-serif;
+}
+
+:root {
+    --primary-color: #1DB954;
+    --background-color: #0b0f0c;
+    --secondary-bg: #121212;
+    --text-color: #ffffff;
+    --accent-color: #1ed760;
+}
+
+/* Fondo general */
+[data-testid="stAppViewContainer"] {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+/* Quitar padding lateral */
+[data-testid="stAppViewContainer"] > .main {
+    padding: 0rem 2rem;
+}
+
+/* Ajustar contenido */
+.block-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+/* Botones */
+[data-testid="stButton"] button {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 10px;
+    border: none;
+    transition: 0.3;
+}
+[data-testid="stButton"] button:hover {
+    background-color: var(--accent-color);
+}
+/* HEADER */
+.custom-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 30px;
+    background-color: #000;
+    border-bottom: 1px solid #1DB954;
+    box-shadow: 0 0 10px #1DB95433;
+}
+/* LOGO */
+.custom-header .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%; /* opcional tipo circular */
+}
+.custom-header .logo:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+/* TEXTO */
+.custom-header .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1DB954;
+}
+/*Scrollbar*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1DB954;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1ed760;
+}
