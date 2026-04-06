@@ -19,16 +19,16 @@ html, body, [class*="css"] {
 }
 
 :root {
-    --primary-color: #1DB954;
-    --background-color: #0b0f0c;
-    --secondary-bg: #121212;
+    --background-color: #0d001a; /* negro con tono morado */
+    --secondary-bg: #14002a;
+    --primary-color: #8a2be2; /* morado vivo */
+    --accent-color: #a855f7;
     --text-color: #ffffff;
-    --accent-color: #1ed760;
 }
 
 /* Fondo general */
 [data-testid="stAppViewContainer"] {
-    background-color: var(--background-color);
+    background: linear-gradient(180deg, #0d001a2c, #14002a7a);
     color: var(--text-color);
 }
 /* Quitar padding lateral */
@@ -56,13 +56,19 @@ html, body, [class*="css"] {
 }
 /* HEADER */
 .custom-header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
     display: flex;
     align-items: center;
     gap: 15px;
+
     padding: 15px 30px;
-    background-color: #000;
-    border-bottom: 1px solid #1DB954;
-    box-shadow: 0 0 10px #1DB95433;
+    background-color: #0d001a;
+
+    border-bottom: 1px solid var(--primary-color);
+    box-shadow: 0 0 10px #8a2be233;
 }
 /* LOGO */
 .custom-header .logo {
@@ -79,7 +85,7 @@ html, body, [class*="css"] {
 .custom-header .title {
     font-size: 24px;
     font-weight: bold;
-    color: #1DB954;
+    color: white;
 }
 /*Scrollbar*/
 ::-webkit-scrollbar {
