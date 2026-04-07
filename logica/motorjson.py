@@ -5,9 +5,6 @@ import pylast
 import os
 from dotenv import load_dotenv
 import psycopg2
-from datetime import datetime, timedelta
-from functools import lru_cache
-
 
 load_dotenv()
 
@@ -154,10 +151,10 @@ def obtenerGeneros(artist,cursor=None, memoria_generos=None):
                    ON CONFLICT (nombre_artista)
                    DO UPDATE SET texto_generos = EXCLUDED.texto_generos, fecha_actualizacion = NOW()
                    ''', (artist, texto_generos))
-    memoria_generos[artist] = artist    
+    memoria_generos[artist] = texto_generos    
     return texto_generos
 
-#MÓDULO 1: "Historial completo". Utiliza datos json
+#MÓDULO 1: "Historial completo". Utiliza datos json 
 
 def procesarDatosJson(archivosSubidos):
     conexion = obtener_conexion()
@@ -290,8 +287,10 @@ if __name__ == "__main__":
     pd.set_option('display.max_columns',None)
     pd.set_option('display.max_colwidth', None)  
     pd.set_option('display.max_rows', None)    
-    pd.set_option('display.width', 1000)    
-    archivosPrueba = glob.glob("datosSpoti/*/StreamingHistory_music_*.json") #cambiar la ruta por la ruta de sus archivos
+    pd.set_option('display.width', 1000)
+    rutaBase = os.getenv("RUTA_DATOS_SPOTIFY", "datosSpoti")    
+    patronBusqueda = os.path.join(rutaBase, "*", "StreamingHistory_music_*.json")
+    archivosPrueba = glob.glob(patronBusqueda) #cambiar la ruta por la ruta de sus archivos
     
     if not archivosPrueba:
         print("No se encontraron archivos JSON en la carpeta.")
