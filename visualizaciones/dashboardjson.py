@@ -16,3 +16,5 @@ for mes in meses:
     urlArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["urlFoto"].iloc[0]
     emojiVibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
     minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["porcentajeReloj"].iloc[0] 
+
+    
