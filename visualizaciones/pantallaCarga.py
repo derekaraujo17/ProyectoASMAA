@@ -46,13 +46,8 @@ def mostrar_pantalla_carga():
             try:
                 resultados = ejecutar_motor_json(st.session_state["jsonValidos"])
                 st.session_state["resultados"] = resultados
-                st.success("El backend terminó el análisis")
-                st.write("tupla guardada. longitud:", len(resultados))
-                st.write("Muestra de la primera tabla:")
-                st.dataframe(resultados[0])
-                st.stop
-                #st.session_state["analisis_listo"] = True
-                #st.rerun()
+                st.session_state["analisis_listo"] = True
+                st.rerun()
             except Exception as e:
                 st.error(f"Error al analizar los datos: {e}")
         elif st.session_state["motor"] == "motoroauth":
