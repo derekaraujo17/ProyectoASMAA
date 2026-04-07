@@ -14,7 +14,7 @@ spotifyOauth=SpotifyOAuth(
 )
 
 def mostrar_pantalla_pibble():
-    rutaCssGlobal = "frontend/estilosglobales.css"
+    rutaCssGlobal = "frontend/estilosGlobales.css"
     try: 
         with open(rutaCssGlobal, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)

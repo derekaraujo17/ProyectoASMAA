@@ -1,21 +1,21 @@
 import streamlit as st
-
+from visualizaciones.header import render_header
 def mostrar_pantalla_botones():
     #conexión con css
-    rutaCssSeleccion="frontend/seleccion.css"
     rutaCssGlobal="frontend/estilosGlobales.css"
     try:
         with open(rutaCssGlobal,"r",encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
     except FileNotFoundError:
         pass
+    rutaCssSeleccion="frontend/seleccion.css"
     try:
         with open(rutaCssSeleccion, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
     except FileNotFoundError:
         st.warning("Esperando el archivo frontend")
     st.title("Elegir la opción de los datos")
-
+    render_header()
     col1, col2 = st.columns(2)
 
     with col1:
