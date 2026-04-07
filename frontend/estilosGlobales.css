@@ -49,7 +49,7 @@ html, body, [class*="css"] {
     color: white;
     border-radius: 10px;
     border: none;
-    transition: 0.3;
+    transition: 0.3s;
 }
 [data-testid="stButton"] button:hover {
     background-color: var(--accent-color);
