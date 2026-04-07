@@ -5,8 +5,9 @@ import pylast
 import os
 from dotenv import load_dotenv
 import psycopg2
-from psycopg2.extras import execute_values
 from datetime import datetime, timedelta
+from functools import lru_cache
+
 
 load_dotenv()
 
@@ -46,8 +47,6 @@ def inicializardb():
     conexion.commit()
     cursor.close()
     conexion.close()
-inicializardb()
-
 
 diccionarioVibras = {
     # --- CULTURA HIP-HOP Y CALLE ---
@@ -103,25 +102,18 @@ def calcularVibra(listaTextosGeneros):
     
     return vibraGanadora
 
-def obtenerImagenes(artist,track=None):
+def obtenerImagenes(artist,track=None,cursor=None,memoria_imagenes=None):
+    if cursor is None or memoria_imagenes is None:
+        raise ValueError("Se necesita un cursor activo y la memoria de imágenes para consultar la base de datos")
     if track:
         id_busqueda = f"track:{artist}-{track}"
     else:
         id_busqueda = f"artist:{artist}"
     
-    conexion = obtener_conexion()
-    cursor = conexion.cursor()
-
-    cursor.execute('''
-    SELECT url_imagen FROM imagenes_cache
-    WHERE id_busqueda = %s AND fecha_actualizacion > NOW() - INTERVAL '30 days' 
-    ''',(id_busqueda,))
-    
-    resultadoCache = cursor.fetchone() #extrae la respuesta
-    if resultadoCache:
-        conexion.close()
-        return resultadoCache[0]
+    if id_busqueda in memoria_imagenes:
+        return memoria_imagenes[id_busqueda]
     urlFinal = "sin imagen"
+
     try:
         if track:
             resultado = sp.search(q=f"artist:{artist} track:{track}",type="track",limit=1)
@@ -137,23 +129,16 @@ def obtenerImagenes(artist,track=None):
                    ON CONFLICT (id_busqueda)
                    DO UPDATE SET url_imagen = EXCLUDED.url_imagen, fecha_actualizacion = NOW()'''
                    ,(id_busqueda, urlFinal))
-    conexion.commit()
-    cursor.close()
-    conexion.close()
+    memoria_imagenes[id_busqueda] = urlFinal
     return urlFinal
 
 #obtener los géneros
-def obtenerGeneros(artist):
-    conexion = obtener_conexion()
-    cursor = conexion.cursor()
-    cursor.execute('''
-                   SELECT texto_generos FROM generos_cache
-                   WHERE nombre_artista = %s AND fecha_actualizacion > NOW() - INTERVAL '30 days' 
-                   ''', (artist,))
-    resultadoCache = cursor.fetchone()
-    if resultadoCache:
-        conexion.close()
-        return resultadoCache[0]
+def obtenerGeneros(artist,cursor=None, memoria_generos=None):
+    if cursor is None or memoria_generos is None:
+        raise ValueError("Se necesita un cursor activo y un memoria_generos")
+    if artist in memoria_generos:
+        return memoria_generos[artist]
+
     texto_generos = "sin clasificar"
     try:
         artist_lastfm = network.get_artist(artist)
@@ -169,15 +154,21 @@ def obtenerGeneros(artist):
                    ON CONFLICT (nombre_artista)
                    DO UPDATE SET texto_generos = EXCLUDED.texto_generos, fecha_actualizacion = NOW()
                    ''', (artist, texto_generos))
-    
-    conexion.commit()
-    cursor.close()
-    conexion.close()
+    memoria_generos[artist] = artist    
     return texto_generos
 
 #MÓDULO 1: "Historial completo". Utiliza datos json
 
 def procesarDatosJson(archivosSubidos):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("SELECT id_busqueda, url_imagen FROM imagenes_cache WHERE fecha_actualizacion > NOW() - INTERVAL '30 days' ")
+    memoria_imagenes = dict(cursor.fetchall())
+
+    cursor.execute("SELECT nombre_artista, texto_generos FROM generos_cache WHERE fecha_actualizacion > NOW() - INTERVAL '30 days' ")
+    memoria_generos = dict(cursor.fetchall())
+
     listadf = []
     mesesEspañol = {
         1:"Enero", 2:"Febrero", 3:"Marzo",4:"Abril",5:"Mayo",6:"Junio",
@@ -220,7 +211,8 @@ def procesarDatosJson(archivosSubidos):
     dfArtistasMensual = dfLimpio.groupby(["añoMesReproduccion","artistName","ordenTemporal"])["minutosReproducidos"].sum().reset_index()
     dfArtistasMensual =dfArtistasMensual.sort_values(by=["ordenTemporal","minutosReproducidos"],ascending=[True,False])
     top5Artistas =dfArtistasMensual.groupby("añoMesReproduccion").head().copy()
-    top5Artistas["urlFoto"] = top5Artistas["artistName"].apply(obtenerImagenes)
+    
+    top5Artistas["urlFoto"] = top5Artistas["artistName"].apply(lambda artist: obtenerImagenes(artist, track=None, cursor=cursor,memoria_imagenes=memoria_imagenes))
 
     #CANCIONES MÁS ESCUCHADAS
     dfCancionesMensual = dfLimpio.groupby(["añoMesReproduccion","trackName","artistName","ordenTemporal"]).agg(
@@ -229,7 +221,7 @@ def procesarDatosJson(archivosSubidos):
     ).reset_index()
     dfCancionesMensual=dfCancionesMensual.sort_values(by=["ordenTemporal","totalMinutos"],ascending=[True,False])
     top5Canciones=dfCancionesMensual.groupby("añoMesReproduccion").head().copy()
-    top5Canciones["urlPortada"] = top5Canciones.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"]),axis=1)
+    top5Canciones["urlPortada"] = top5Canciones.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"],cursor=cursor,memoria_imagenes=memoria_imagenes),axis=1)
     
     #RESUMEN SEMANAL
     tiempoSemanal = dfLimpio.groupby(["añoMesReproduccion","semanaReproduccion","ordenTemporal"]).agg(
@@ -251,14 +243,13 @@ def procesarDatosJson(archivosSubidos):
     dfArtistasSemanal = dfArtistasSemanal.sort_values(by=["ordenTemporal", "añoMesReproduccion","semanaReproduccion","totalMinutosArt"],ascending=[True,True,True,False])
     dfArtistasSemanal = dfArtistasSemanal.groupby(["añoMesReproduccion","semanaReproduccion"]).head(3).copy()
     
-    dfArtistasSemanal["urlFoto"] = dfArtistasSemanal["artistName"].apply(obtenerImagenes)
+    dfArtistasSemanal["urlFoto"] = dfArtistasSemanal["artistName"].apply(lambda artist: obtenerImagenes(artist, track=None, cursor=cursor, memoria_imagenes=memoria_imagenes))
 
-    dfCancionesSemanal["urlPortada"] = dfCancionesSemanal.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"]),axis=1)
+    dfCancionesSemanal["urlPortada"] = dfCancionesSemanal.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"],cursor=cursor,memoria_imagenes=memoria_imagenes),axis=1)
 
     #FEELING MENSUAL
-    memoriaGeneros={}
     top20CancionesMensual = dfCancionesMensual.groupby(["añoMesReproduccion","ordenTemporal"]).head(20).copy()
-    top20CancionesMensual["generos"] = top20CancionesMensual["artistName"].apply(obtenerGeneros)
+    top20CancionesMensual["generos"] = top20CancionesMensual["artistName"].apply(lambda artist: obtenerGeneros(artist, cursor=cursor,memoria_generos = memoria_generos))
 
     feelingMensual = top20CancionesMensual.groupby(["añoMesReproduccion","ordenTemporal"])[["generos"]].agg(list).reset_index()
 
@@ -269,11 +260,11 @@ def procesarDatosJson(archivosSubidos):
 
     #canciones top 1
     cancionesTop1 = top5Canciones.groupby("añoMesReproduccion").head(1).copy()
-    cancionesTop1["urlPortada"] = cancionesTop1.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"]),axis=1)
+    cancionesTop1["urlPortada"] = cancionesTop1.apply(lambda fila: obtenerImagenes(fila["artistName"],fila["trackName"],cursor=cursor, memoria_imagenes=memoria_imagenes),axis=1)
     
     #artistas top 1
     artistasTop1 = top5Artistas.groupby("añoMesReproduccion").head(1).copy()
-    artistasTop1["urlFoto"] = artistasTop1["artistName"].apply(obtenerImagenes)
+    artistasTop1["urlFoto"] = artistasTop1["artistName"].apply(lambda artist: obtenerImagenes(artist, track=None, cursor=cursor, memoria_imagenes=memoria_imagenes))
     
     cancionesTop1 = cancionesTop1.tail(12)
     artistasTop1 = artistasTop1.tail(12)
@@ -286,10 +277,15 @@ def procesarDatosJson(archivosSubidos):
     dfArtistasSemanal = dfArtistasSemanal[dfArtistasSemanal["añoMesReproduccion"].isin(mesesValidos)]
     dfCancionesSemanal = dfCancionesSemanal[dfCancionesSemanal["añoMesReproduccion"].isin(mesesValidos)]
     tiempoSemanal = tiempoSemanal[tiempoSemanal["añoMesReproduccion"].isin(mesesValidos)]
+
+    conexion.commit()
+    cursor.close()
+    conexion.close()
     
     return cancionesTop1, artistasTop1, resumenFeeling, dfTiempoMensual, top5Canciones, top5Artistas, dfArtistasSemanal, dfCancionesSemanal,tiempoSemanal
 
 if __name__ == "__main__":
+    inicializardb()
     import glob
     pd.set_option('display.max_columns',None)
     pd.set_option('display.max_colwidth', None)  
