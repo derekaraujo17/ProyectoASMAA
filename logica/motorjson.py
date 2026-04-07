@@ -2,10 +2,10 @@ import pandas as pd
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pylast
-from collections import Counter
 import os
 from dotenv import load_dotenv
-import sqlite3
+import psycopg2
+from psycopg2.extras import execute_values
 from datetime import datetime, timedelta
 
 load_dotenv()
@@ -22,26 +22,29 @@ apiSecret = os.getenv("LASTFM_API_SECRET")
 network = pylast.LastFMNetwork(api_key=apiKey, api_secret=apiSecret)
 
 #base de datos con caché de las búsquedas realizadas
-DB_PATH = "spotifyCache.db"
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+def obtener_conexion():
+    return psycopg2.connect(DATABASE_URL)
+
 def inicializardb():
-    conexion = sqlite3.connect(DB_PATH)
+    conexion = obtener_conexion()
     cursor = conexion.cursor()
     #tabla para las imágenes
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS imagenes_cache (
                    id_busqueda TEXT PRIMARY KEY,
                    url_imagen TEXT,
-                   fecha_actualizacion TIMESTAMP
-                   )
-                   ''')
+                   fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+    
     #tabla para los géneros
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS generos_cache(
                    nombre_artista TEXT PRIMARY KEY,
                    texto_generos TEXT,
-                   fecha_actualizacion TIMESTAMP
-                   )''')    
+                   fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')    
     conexion.commit()
+    cursor.close()
     conexion.close()
 inicializardb()
 
@@ -106,15 +109,13 @@ def obtenerImagenes(artist,track=None):
     else:
         id_busqueda = f"artist:{artist}"
     
-    conexion = sqlite3.connect(DB_PATH)
+    conexion = obtener_conexion()
     cursor = conexion.cursor()
-
-    limiteTiempo = (datetime.now() - timedelta(days=30)).isoformat()
 
     cursor.execute('''
     SELECT url_imagen FROM imagenes_cache
-    WHERE id_busqueda = ? AND fecha_actualizacion > ?'''
-                   ,(id_busqueda, limiteTiempo))
+    WHERE id_busqueda = %s AND fecha_actualizacion > NOW() - INTERVAL '30 days' 
+    ''',(id_busqueda,))
     
     resultadoCache = cursor.fetchone() #extrae la respuesta
     if resultadoCache:
@@ -131,21 +132,24 @@ def obtenerImagenes(artist,track=None):
     except Exception as e:
             urlFinal = "sin imagen"
     cursor.execute('''
-                   INSERT OR REPLACE INTO imagenes_cache (id_busqueda, url_imagen, fecha_actualizacion)
-                   VALUES (?, ?, ?)''',(id_busqueda, urlFinal, datetime.now().isoformat()))
+                   INSERT INTO imagenes_cache (id_busqueda, url_imagen, fecha_actualizacion)
+                   VALUES (%s, %s, NOW())
+                   ON CONFLICT (id_busqueda)
+                   DO UPDATE SET url_imagen = EXCLUDED.url_imagen, fecha_actualizacion = NOW()'''
+                   ,(id_busqueda, urlFinal))
     conexion.commit()
+    cursor.close()
     conexion.close()
     return urlFinal
 
 #obtener los géneros
 def obtenerGeneros(artist):
-    conexion = sqlite3.connect(DB_PATH)
+    conexion = obtener_conexion()
     cursor = conexion.cursor()
-    limiteTiempo = (datetime.now() - timedelta(days=30)).isoformat()
     cursor.execute('''
                    SELECT texto_generos FROM generos_cache
-                   WHERE nombre_artista = ? AND fecha_actualizacion > ?'''
-                   , (artist, limiteTiempo))
+                   WHERE nombre_artista = %s AND fecha_actualizacion > NOW() - INTERVAL '30 days' 
+                   ''', (artist,))
     resultadoCache = cursor.fetchone()
     if resultadoCache:
         conexion.close()
@@ -160,12 +164,15 @@ def obtenerGeneros(artist):
         texto_generos = "no encontrado"
     
     cursor.execute('''
-                   INSERT OR REPLACE INTO generos_cache (nombre_artista, texto_generos, fecha_actualizacion)
-                   VALUES (?, ?, ?)''', (artist, texto_generos, datetime.now().isoformat()))
+                   INSERT INTO generos_cache (nombre_artista, texto_generos, fecha_actualizacion)
+                   VALUES (%s, %s, NOW())
+                   ON CONFLICT (nombre_artista)
+                   DO UPDATE SET texto_generos = EXCLUDED.texto_generos, fecha_actualizacion = NOW()
+                   ''', (artist, texto_generos))
     
     conexion.commit()
+    cursor.close()
     conexion.close()
-
     return texto_generos
 
 #MÓDULO 1: "Historial completo". Utiliza datos json

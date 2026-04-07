@@ -12,3 +12,5 @@ tabulate
 #interfaz web
 streamlit
 streamlit-lottie
+#base de datos
+psycopg2-binary
