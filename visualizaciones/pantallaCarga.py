@@ -2,6 +2,11 @@ import streamlit as st
 import time
 import random
 
+@st.cache_data(show_spinner=False)
+def ejecutar_motor_json(archivos):
+    from logica.motorjson import procesarDatosJson
+    return procesarDatosJson(archivos)
+
 def mostrar_pantalla_carga():
     if "analisis_listo" not in st.session_state:
         st.session_state["analisis_listo"] = False
@@ -38,9 +43,13 @@ def mostrar_pantalla_carga():
 
     if not st.session_state["analisis_listo"]:
         if st.session_state["motor"] == "motorjson":
-            time.sleep(10)
-            st.session_state["analisis_listo"] = True
-            st.rerun()
+            try:
+                resultados = ejecutar_motor_json(st.session_state["jsonValidos"])
+                st.session_state["resultados"] = resultados
+                st.session_state["analisis_listo"] = True
+                st.rerun()
+            except Exception as e:
+                st.error(f"Error al analizar los datos: {e}")
         elif st.session_state["motor"] == "motoroauth":
             time.sleep(10)
             st.session_state["analisis_listo"] = True
