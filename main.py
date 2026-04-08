@@ -26,7 +26,7 @@ elif st.session_state["pantalla_actual"] == "pantallaCarga":
     pantallaCarga.mostrar_pantalla_carga()
 
 elif st.session_state["pantalla_actual"] == "dashboardjson":
-    st.title("dashboard de json")
+    dashboardjson.mostrar_dashboardjson()
 #cuando creemos el dashboard de oauth
 elif st.session_state["pantalla_actual"] == "dashboardoauth":
     st.title("dashboard de oauth")
