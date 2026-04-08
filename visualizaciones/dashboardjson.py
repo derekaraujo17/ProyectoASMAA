@@ -26,10 +26,6 @@ def obtener_pibble_base64(nombreArtista, generoArtista):
 
 
 def mostrar_dashboardjson():
-    if "mes" in st.query_params:
-        pantallaMes = st.query_params["mes"]
-        st.session_state["pantallaMes"] = pantallaMes
-
     render_header()
     rutaCssGlobal = "frontend/estilosGlobales.css"
     try:
@@ -59,9 +55,9 @@ def mostrar_dashboardjson():
             st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
         except:
             st.warning(f"Esperando el archivo frontend")
-        
-        todasLasTarjetas = ""
-        for mes in meses:
+        cols = st.columns(3) 
+
+        for index, mes in enumerate(meses):
             urlCancion = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["urlPortada"].iloc[0]
             urlArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["urlFoto"].iloc[0]
             emojiVibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
@@ -80,14 +76,73 @@ def mostrar_dashboardjson():
             tarjetaActual = tarjetaActual.replace("{{PORCENTAJE}}", str(porcentaje))
             tarjetaActual = tarjetaActual.replace("{{MINUTOS_TOTALES}}",str(minutos))
             tarjetaActual = tarjetaActual.replace("{{IMAGEN_PIBBLE}}",imagenPibbleBase64)
-            todasLasTarjetas += tarjetaActual
 
-        gridFinal = f'<div class="contenedor-grid">{todasLasTarjetas}</div>'
-        st.markdown(gridFinal, unsafe_allow_html=True)
+            colActual = cols[index%3]
+            with colActual:
+                st.markdown(tarjetaActual, unsafe_allow_html=True)
+                if st.button(f"Ver resumen de{mes}", key=f"btn_{mes}", use_container_width=True):
+                    st.session_state["pantallaMes"] = mes
+                    st.rerun()
     else:
         mes = st.session_state["pantallaMes"]
-        urlCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["urlPortada"].iloc[0]
-        nombreCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["trackName"].iloc[0]
-        nombreArtista1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
-        if "paso_historia" not in st.session_state:
-            st.session_state["paso_historia"] = 1
+        paso = st.session_state.setdefault("paso_historia",1)
+        if paso == 1:
+            rutaHtmlDiapositiva1="frontend/animacionJson/slideCancion.html"
+            with open(rutaHtmlDiapositiva1, "r", encoding="utf-8") as f:
+                moldeSlide = f.read()
+            urlCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["urlPortada"].iloc[0]
+            nombreCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["trackName"].iloc[0]
+            nombreArtista1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
+            escuchas = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["cantidadEscuchas"].iloc[0]
+            slideActual = moldeSlide.replace("{{URL_CANCION}}", urlCancion1)
+            slideActual = slideActual.replace("{{NOMBRE_CANCION}}",nombreCancion1)
+            slideActual = slideActual.replace("{{NOMBRE_ARTISTA}}",nombreArtista1)
+            slideActual = slideActual.replace("{{CANTIDAD_ESCUCHAS}}",str(escuchas))
+            st.markdown(slideActual, unsafe_allow_html=True)
+            if st.button("Siguiente paso: Tu artista top"):
+                st.session_state["paso_historia"] = 2
+                st.rerun()
+        elif paso == 2:
+            rutaHtmlDiapositiva2 = "frontend/animacionJson/slideArtista.html"
+            with open(rutaHtmlDiapositiva2, "r", encoding="utf-8") as f:
+                moldeSlide = f.read()
+            nombreArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
+            urlArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["urlFoto"].iloc[0]
+            generoArtista = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            imagenPibble = obtener_pibble_base64(nombreArtista, generoArtista)
+            minutosArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            slideActual = moldeSlide.replace("{{IMAGEN_PIBBLE}}", imagenPibble)
+            slideActual = slideActual.replace("{{URL_ARTISTA}}",urlArtista)
+            slideActual = slideActual.replace("{{NOMBRE_ARTISTA}}", nombreArtista)
+            slideActual = slideActual.replace("{{MINUTOS_TOTALES}}", str(minutosArtista))
+            st.markdown(slideActual, unsafe_allow_html=True)
+            if st.button("Siguiente paso: Tu vibra mensual"):
+                st.session_state["paso_historia"] = 3
+                st.rerun()
+        elif paso == 3:
+            rutaHtmlDiapositiva3 = "frontend/animacionJson/slideFeeling.html"
+            with open(rutaHtmlDiapositiva3, "r", encoding="utf-8") as f:
+                moldeSlide = f.read()
+            vibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            emoji = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
+            slideActual = moldeSlide.replace("{{EMOJI_VIBRA}}", emoji)
+            slideActual = slideActual.replace("{{NOMBRE_VIBRA}}", vibra)
+            st.markdown(slideActual, unsafe_allow_html=True)
+            if st.button("Siguiente paso: Tu tiempo total de escucha"):
+                st.session_state["paso_historia"]=4
+                st.rerun()
+        elif paso == 4:
+            rutaHtmlDiapositiva4 = "frontend/animacionJson/slideTiempo.html"
+            with open(rutaHtmlDiapositiva4, "r", encoding="utf-8") as f:
+                moldeSlide = f.read()
+            minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            diasTotales = round(minutosTotales/1440,1)
+            slideActual = moldeSlide.replace("{{MINUTOS_TOTALES}}",str(minutosTotales))
+            slideActual = slideActual.replace("{{DIAS_TOTALES}}",str(diasTotales))
+            st.markdown(slideActual, unsafe_allow_html=True)
+            if st.button("Resumen completo"):
+                st.session_state["paso_historia"] = 5
+                st.rerun()
+
+
+
