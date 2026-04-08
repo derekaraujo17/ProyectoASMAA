@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 import os
+import streamlit as st
 
 load_dotenv()
-import streamlit as st
+st.set_page_config(page_title="Spibblepy",layout="wide")
 from visualizaciones import home, seleccion, dashboardjson, dashboardoauth, pantallaCarga
 
 #ESTUDIEN EL CONCEPTO BÁSICO DEL BACKEND WEB EN STREAMLIT: LA MEMORIA SE SESIÓN (st.session_state)

@@ -38,7 +38,7 @@ def mostrar_dashboardjson():
         emojiVibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
         porcentaje = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["porcentajeReloj"].iloc[0]
         minutos = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0] 
-        
+        porcentaje = int(porcentaje*100)
         tarjetaActual = codigoHtml
 
         tarjetaActual = tarjetaActual.replace("{{MES_ACTUAL}}",mes)
