@@ -157,6 +157,7 @@ def obtenerGeneros(artist,cursor=None, memoria_generos=None):
 #MÓDULO 1: "Historial completo". Utiliza datos json 
 
 def procesarDatosJson(archivosSubidos):
+    inicializardb()
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     
@@ -282,7 +283,6 @@ def procesarDatosJson(archivosSubidos):
     return cancionesTop1, artistasTop1, resumenFeeling, dfTiempoMensual, top5Canciones, top5Artistas, dfArtistasSemanal, dfCancionesSemanal,tiempoSemanal
 
 if __name__ == "__main__":
-    inicializardb()
     import glob
     pd.set_option('display.max_columns',None)
     pd.set_option('display.max_colwidth', None)  
