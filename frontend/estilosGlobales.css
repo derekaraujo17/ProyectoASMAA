@@ -19,16 +19,16 @@ html, body, [class*="css"] {
 }
 
 :root {
-    --background-color: #0d001a; /* negro con tono morado */
-    --secondary-bg: #14002a;
-    --primary-color: #8a2be2; /* morado vivo */
+    --background-color: #002700; /* negro con tono morado */
+    --secondary-bg: #002700;
+    --primary-color: #002700; /* morado vivo */
     --accent-color: #a855f7;
     --text-color: #ffffff;
 }
 
 /* Fondo general */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(180deg, #0d001a2c, #14002a7a);
+    background: linear-gradient(180deg, #532549, #3a132f);
     color: var(--text-color);
 }
 /* Quitar padding lateral */
@@ -67,7 +67,7 @@ html, body, [class*="css"] {
     gap: 15px;
 
     padding: 10px 30px; 
-    background-color: #0d001a;
+    background-color: #3a132f ;
 
     border-bottom: 1px solid var(--primary-color);
     box-shadow: 0 0 10px #8a2be233;
