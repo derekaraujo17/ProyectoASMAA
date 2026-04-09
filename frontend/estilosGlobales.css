@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 /*Ocultar header*/
 [data-testid="stHeader"] {
     display: none;
@@ -13,23 +15,31 @@ footer {
 [data-testid="stFooter"]{
     display: none;
 }
-/* Tipografía global */
-html, body, [class*="css"] {
-    font-family: 'Circular Std', sans-serif;
+
+/* Fuente para títulos */
+h1, h2, h3, .custom-header .title {
+    font-family: 'Press Start 2P', cursive;
 }
 
 :root {
-    --background-color: #002700; /* negro con tono morado */
-    --secondary-bg: #002700;
-    --primary-color: #002700; /* morado vivo */
-    --accent-color: #a855f7;
+    --background-color: #0d001a;
+    --secondary-bg: #1a0b1f;
+    --primary-color: #6a0dad; /* Morado profundo */
+    --accent-color: #a855f7; /* Morado brillante */
+    --hover-color: #c084fc;  /* Morado claro */
     --text-color: #ffffff;
 }
 
 /* Fondo general */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(180deg, #532549, #3a132f);
-    color: var(--text-color);
+    background: radial-gradient(
+        circle at top left,
+        #3a132f 0%,
+        #1a0b1f 35%,
+        #0d001a 70%,
+        #000000 100%
+    );
+    color: #ffffff;
 }
 /* Quitar padding lateral */
 [data-testid="stAppViewContainer"] > .main {
@@ -45,32 +55,58 @@ html, body, [class*="css"] {
 }
 /* Botones */
 [data-testid="stButton"] button {
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: #ffffff;
+    border-radius: 12px;
     border: none;
-    transition: 0.3s;
+    padding: 0.6rem 1.4rem;
+    font-weight: bold;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
 }
+
+/* Hover */
 [data-testid="stButton"] button:hover {
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, var(--accent-color), var(--hover-color));
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+}
+
+/* Click */
+[data-testid="stButton"] button:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 5px rgba(168, 85, 247, 0.4);
 }
 /* HEADER */
 .custom-header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%; 
-    z-index: 99999; 
+    right: 0;
+    width: calc(100% - 12px);
+    z-index: 9999;
 
     display: flex;
     align-items: center;
     gap: 15px;
 
-    padding: 10px 30px; 
-    background-color: #3a132f ;
+    padding: 12px 30px;
 
-    border-bottom: 1px solid var(--primary-color);
-    box-shadow: 0 0 10px #8a2be233;
+    /* Negro transparente */
+    background: rgba(0, 0, 0, 0.6);
+
+    /* Efecto de difuminado */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Detalles visuales */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+    /* Transición suave */
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
 }
 /* LOGO */
 .custom-header .logo {
@@ -90,17 +126,23 @@ html, body, [class*="css"] {
 }
 /*Scrollbar*/
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 ::-webkit-scrollbar-track {
-    background: #121212;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #1DB954;
+    background: #000000; /* Fondo negro */
     border-radius: 10px;
 }
-
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #8a2be2, #a855f7); /* Morado elegante */
+    border-radius: 10px;
+    border: 2px solid #000000; /* Contorno negro */
+    background-clip: padding-box;
+}
 ::-webkit-scrollbar-thumb:hover {
-    background: #1ed760;
+    background: linear-gradient(180deg, #a855f7, #c084fc);
+}
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #8a2be2 #000000; /* thumb | track */
 }
