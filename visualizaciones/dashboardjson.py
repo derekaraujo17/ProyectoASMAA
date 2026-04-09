@@ -32,7 +32,7 @@ def mostrar_dashboardjson():
         with open(rutaCssGlobal, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True) 
     except FileNotFoundError:
-        pass   
+        pass  
     resultados = st.session_state.get("resultados",None)
 
     if resultados is None:
@@ -86,6 +86,12 @@ def mostrar_dashboardjson():
     else:
         mes = st.session_state["pantallaMes"]
         paso = st.session_state.setdefault("paso_historia",1)
+        rutaCssDiapositivas = "frontend/animacionJson/diapositiva.css"
+        try:
+            with open(rutaCssDiapositivas, "r", encoding="utf-8") as f:
+                st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        except FileNotFoundError:
+            pass
         if paso == 1:
             rutaHtmlDiapositiva1="frontend/animacionJson/slideCancion.html"
             with open(rutaHtmlDiapositiva1, "r", encoding="utf-8") as f:
@@ -155,10 +161,20 @@ def mostrar_dashboardjson():
                 nombreArtista = fila["artistName"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlCancion}"><p class="nombre-cancion">{nombreCancion} de {nombreArtista}</p></li>'
                 htmlListaCanciones += elementoLi
+            artistasDelMes = top5Artistas[top5Artistas["añoMesReproduccion"]==mes]
+            htmlListaArtistas = ""
+            for index, fila in artistasDelMes.iterrows():
+                urlArtista = fila["urlFoto"]
+                nombreArtista = fila["artistName"]
+                minutos = fila["minutosReproducidos"]
+                elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlArtista}"><p class="nombre-artista">{nombreArtista} con un total de <span class="minutos-artista">{minutos}</span> minutos</p></li>'
+                htmlListaArtistas += elementoLi
             slideActual = moldeSlide.replace("{{MES_ACTUAL}}", mes)
             slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
+            slideActual = slideActual.replace("{{LISTA_ARTISTAS}}", htmlListaArtistas)
             slideActual = slideActual.replace('\n', '')
             st.markdown(slideActual, unsafe_allow_html=True)
+            
             if st.button("Volver al resumen de todos los meses", use_container_width=True):
                 del st.session_state["pantallaMes"]
                 del st.session_state["paso_historia"]
