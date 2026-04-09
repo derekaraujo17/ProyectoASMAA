@@ -1,5 +1,37 @@
+.contenedor-pantalla-carga {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+}
 
-/* 
-darle estilo al texto, centrar cosas, crear las 5 clases diferentes para cada animación usando gifs o sprotesheets
+.pibble-animacion-1 { background-image: url('links/pibble_durmiendo.gif'); }
+.pibble-animacion-2 { background-image: url('links/pibble_barriendo.gif'); }
+.pibble-animacion-3 { background-image: url('links/pibble_comiendo.gif'); }
+.pibble-animacion-4 { background-image: url('links/pibble_leyendo.gif'); }
+.pibble-animacion-5 { background-image: url('links/pibble_jugando.gif'); }
 
-*/
+/*tamaño y ajustes para todos los Pibbles */
+.pibble-animacion-1, .pibble-animacion-2, .pibble-animacion-3, .pibble-animacion-4, .pibble-animacion-5 {
+    width: 200px; 
+    height: 200px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+}
+
+.titulo-carga {
+    color: #1DB954; 
+    font-size: 28px;
+    margin: 0 0 10px 0;
+}
+
+.subtitulo-carga {
+    color: #ffffff;
+    opacity: 0.7;
+    font-size: 16px;
+    margin: 0;
+}
