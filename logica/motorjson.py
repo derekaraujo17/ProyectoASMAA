@@ -48,28 +48,27 @@ def inicializardb():
 diccionarioVibras = {
     # --- CULTURA HIP-HOP Y CALLE ---
     "🎤 Rap & Hip-Hop": ["rap", "hip-hop", "hip hop", "boom bap", "underground hip-hop", "conscious hip hop", "east coast", "west coast"],
-    "🔥 Trap & Drill": ["trap", "drill", "emo rap", "cloud rap", "southern hip hop", "atlanta"],
-    
+    "🔥 Trap & Drill": ["trap", "drill", "emo rap", "cloud rap", "southern hip hop", "atlanta", "trap argentino", "trap latino"],
     # --- URBANO Y REGIONAL LATINO ---
-    "🥵 Urbano Latino": ["reggaeton", "dembow", "latin trap", "urbano latino", "perreo"],
+    "🥵 Urbano Latino": ["reggaeton", "dembow", "latin trap", "urbano latino", "perreo", "pop urbano"],
     "🌮 Regional & Corridos": ["corridos tumbados", "corridos", "nortenas", "regional mexicano", "banda", "mariachi", "ranchera", "mexico"],
     "🌴 Tropical & Fiestero": ["salsa", "cumbia", "bachata", "merengue", "tropical", "cumbia sonidera"],
     
     # --- POP Y TENDENCIAS ---
-    "🪩 Pop Mainstream": ["pop", "dance pop", "electropop", "top 40", "teen pop", "commercial"],
+    "🪩 Pop Mainstream": ["pop", "dance pop", "electropop", "top 40", "teen pop", "commercial", "pop latino", "latin pop"],
     "🌸 K-Pop & Asiático": ["k-pop", "j-pop", "korean", "japanese", "anime", "idol"],
     
     # --- NOSTALGIA Y ROMANCE ---
-    "🍷 Romántico & Cortavenas": ["bolero", "baladas", "romantico", "latin pop", "amor", "jose jose", "spanish"],
+    "🍷 Romántico & Cortavenas": ["bolero", "baladas", "romantico", "amor", "jose jose", "spanish", "cancion de autor", "cantautor"],
     "📻 Nostalgia Retro": ["70s", "80s", "90s", "00s", "disco", "oldies", "retro", "classic"],
     
     # --- ENERGÍA Y CLUB ---
     "⚡ Electrónica & Club": ["electronic", "house", "techno", "edm", "dance", "trance", "dubstep", "drum and bass", "electro"],
     
     # --- GUITARRAS Y BATERÍAS ---
-    "🎸 Rock Clásico & Hard": ["rock", "classic rock", "hard rock", "blues rock", "arena rock"],
+    "🎸 Rock Clásico & Hard": ["rock", "classic rock", "hard rock", "blues rock", "arena rock", "rock en espanol", "rock nacional", "latin rock"],   
     "🖤 Metal & Oscuridad": ["metal", "heavy metal", "death metal", "black metal", "nu metal", "metalcore", "thrash metal"],
-    "🌿 Indie & Alternativo": ["indie", "indie rock", "indie pop", "alternative", "alternative rock", "shoegaze", "post-punk", "new wave"],
+    "🌿 Indie & Alternativo": ["indie", "indie rock", "indie pop", "alternative", "alternative rock", "shoegaze", "post-punk", "new wave", "latin alternative", "indie latino", "indie argentino", "indie mexicano"],
     "🏕️ Country & Folk": ["country", "folk", "americana", "bluegrass", "singer-songwriter", "acoustic"],
     
     # --- CHILL, SOUL Y RELAJACIÓN ---
