@@ -4,6 +4,8 @@ import os
 import re 
 import unicodedata
 import base64
+import random
+from logica.motorjson import diccionarioVibras
 
 def obtener_pibble_base64(nombreArtista, generoArtista):
     nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombreArtista) if unicodedata.category(c) != 'Mn'))
@@ -169,9 +171,53 @@ def mostrar_dashboardjson():
                 minutos = fila["minutosReproducidos"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlArtista}"><p class="nombre-artista">{nombreArtista} con un total de <span class="minutos-artista">{minutos}</span> minutos</p></li>'
                 htmlListaArtistas += elementoLi
+            vibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            emoji = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
+            frasesCreativas = {
+                # --- CULTURA HIP-HOP Y CALLE ---
+                "🎤 Rap & Hip-Hop": ["Barras, beats y flow sin parar.","Escupiendo rimas todo el mes.","El bombo y la caja marcan el ritmo de tus días.","Leyendas del micrófono en repetición constante."],
+                "🔥 Trap & Drill": ["Rompiendo el bajo en cada bocina.", "Modo calle activado este mes.","Mucho fronteo, hi-hats rápidos y actitud.","El sub-bajo retumba, la energía no baja."],
+                # --- URBANO Y REGIONAL LATINO ---
+                "🥵 Urbano Latino": ["Perreo intenso hasta abajo y sin miedo.","El dembow domina tus playlists.","Flow latino que pone a vibrar la calle.","Cero estrés, mucho reggaetón y buenas vibras."],
+                "🌮 Regional & Corridos": ["Pura guitarra sierreña y trompetas al cien.","Corridos que cuentan historias de principio a fin.","Con el sombrero puesto y la música a todo volumen.","Sentimiento ranchero que llega directo al pecho."],
+                "🌴 Tropical & Fiestero": ["Azúcar, sabor y ritmo que obliga a bailar.","Cumbia, salsa y bachata para mover los pies.","Tu mes fue una fiesta caribeña constante.","Clave, güiro y mucho movimiento en la pista."], 
+                # --- POP Y TENDENCIAS ---
+                "🪩 Pop Mainstream": ["Tus gustos están en el top de las listas.", "Pura energía pop para alegrar el día.","Estribillos pegadizos que cantaste a todo pulmón.","Los hits mundiales son la banda sonora de tu vida."],
+                "🌸 K-Pop & Asiático": ["Coreografías perfectas y melodías adictivas.","Todo un idol: tu mes estuvo lleno de brillo asiático.","Vocales increíbles y conceptos visuales en tu cabeza.","Fandom activado, apoyando a tus grupos favoritos."],
+                # --- NOSTALGIA Y ROMANCE ---
+                "🍷 Romántico & Cortavenas": ["Un mes para cantarle al desamor (o al amor).", "Preparando los pañuelos y las baladas.","Letras profundas que pegan justo en el sentimiento.","Dedicando canciones y suspirando con cada acorde."],
+                "📻 Nostalgia Retro": ["Un viaje en el tiempo a las mejores décadas doradas.","Los clásicos nunca mueren, y tu historial lo demuestra.","Hombreras, bolas de disco y sintetizadores vintage.","Como escuchar la radio en los viejos y buenos tiempos."],
+                # --- ENERGÍA Y CLUB ---
+                "⚡ Electrónica & Club": ["El drop perfecto te acompañó en cada momento.","BPMs altos para mantener la energía a tope.","Sintetizadores y luces de neón en tu mente.","Tu habitación se convirtió en el escenario principal."], 
+                # --- GUITARRAS Y BATERÍAS ---
+                "🎸 Rock Clásico & Hard": ["Solos de guitarra legendarios y mucha distorsión.","El espíritu del rock and roll sigue más vivo que nunca.","Baterías pesadas y actitud rebelde en tus oídos.","Levanta los cuernos, este mes fue puro poder eléctrico."],
+                "🖤 Metal & Oscuridad": ["Doble bombo, riffs pesados y mucha agresividad.","Oscuridad y volumen al máximo sin pedir permiso.","Rompiendo cuellos con los breakdowns más brutales.","Intensidad pura que hace temblar las paredes."],
+                "🌿 Indie & Alternativo": ["Fuera del mainstream, directo al alma.", "Guitarras suaves y mucha onda.","Descubriendo joyas ocultas y sonidos diferentes.","Melancolía bonita y letras que te hacen pensar."],
+                "🏕️ Country & Folk": ["Guitarras acústicas e historias junto a la fogata.","Raíces profundas y voces honestas cantando verdades.","Un respiro tranquilo con sabor a madera y naturaleza.","Melodías de carretera para viajes largos y atardeceres."],
+                # --- CHILL, SOUL Y RELAJACIÓN ---
+                "🎷 Soul & R&B": ["Voces sedosas y bajos que te hacen mover la cabeza.","Mucho groove, sentimiento puro y ritmos elegantes.","Vibras aterciopeladas para relajar cuerpo y mente.","El lado más sensual y emotivo de la música."],
+                "☁️ Chill & Lo-Fi": ["Beats relajados para estudiar, trabajar o solo existir.","Una taza de café, lluvia en la ventana y cero estrés.","Frecuencias bajas que calman la ansiedad del día a día.","El soundtrack perfecto para dejar la mente en blanco."],
+                "☕ Jazz & Blues": ["Improvisación, saxofones y acordes complejos.","La tristeza del blues transformada en arte puro.","Sofisticación musical en tiempos asincopados.","Elegancia clásica que nunca pasa de moda."],
+                # --- CONCENTRACIÓN Y ESTUDIO ---
+                "🎻 Clásica & Instrumental": ["Sinfonías magistrales y concentración absoluta.","Bandas sonoras épicas que elevan cualquier momento.","El poder de la música sin necesidad de una sola palabra.","Pianos, violines y arreglos que acarician el espíritu."],
+                # --- EL CASO NEUTRAL (EMPATE TOTAL) ---
+                "🔀 Variado": ["Un poquito de todo: no te casas con un solo género.","Tu historial es un caos hermoso de diferentes mundos.","Pasas del reggaetón al rock sin escalas y sin culpa.","¿Por qué elegir uno cuando puedes escucharlos todos?"]
+            }
+            listaFrases = frasesCreativas.get(vibra, ["Tus gustos musicales son únicos."])
+            fraseElegida = random.choice(listaFrases)
+            palabrasDeVibra = diccionarioVibras.get(vibra, ["Tu estilo único"])
+            cantidadGeneros = min(3, len(palabrasDeVibra))
+            generosElegidos = random.sample(palabrasDeVibra, cantidadGeneros)
+            textoGenerosClave = ", ".join(generosElegidos).title()
+
             slideActual = moldeSlide.replace("{{MES_ACTUAL}}", mes)
             slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
             slideActual = slideActual.replace("{{LISTA_ARTISTAS}}", htmlListaArtistas)
+            slideActual = slideActual.replace("{{EMOJI_VIBRA}}",emoji)
+            slideActual = slideActual.replace("{{NOMBRE_VIBRA}}",vibra)
+            slideActual = slideActual.replace("{{FRASE_ALEATORIA}}", fraseElegida)
+            slideActual = slideActual.replace("{{GENEROS_CLAVE}}",textoGenerosClave)
+
             slideActual = slideActual.replace('\n', '')
             st.markdown(slideActual, unsafe_allow_html=True)
             
