@@ -143,6 +143,24 @@ def mostrar_dashboardjson():
             if st.button("Resumen completo"):
                 st.session_state["paso_historia"] = 5
                 st.rerun()
-
-
-
+        elif paso == 5:
+            rutaHtmlDiapositiva5 = "frontend/animacionJson/slideCompleto.html"
+            with open(rutaHtmlDiapositiva5, "r",encoding="utf-8") as f:
+                moldeSlide = f.read()
+            cancionesDelMes = top5Canciones[top5Canciones["añoMesReproduccion"]==mes]
+            htmlListaCanciones = ""
+            for index, fila in cancionesDelMes.iterrows():
+                urlCancion = fila["urlPortada"]
+                nombreCancion = fila["trackName"]
+                nombreArtista = fila["artistName"]
+                elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlCancion}"><p class="nombre-cancion">{nombreCancion} de {nombreArtista}</p></li>'
+                htmlListaCanciones += elementoLi
+            slideActual = moldeSlide.replace("{{MES_ACTUAL}}", mes)
+            slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
+            slideActual = slideActual.replace('\n', '')
+            st.markdown(slideActual, unsafe_allow_html=True)
+            if st.button("Volver al resumen de todos los meses", use_container_width=True):
+                del st.session_state["pantallaMes"]
+                del st.session_state["paso_historia"]
+                st.rerun()
+                
