@@ -210,6 +210,33 @@ def mostrar_dashboardjson():
             generosElegidos = random.sample(palabrasDeVibra, cantidadGeneros)
             textoGenerosClave = ", ".join(generosElegidos).title()
 
+            minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            tipoDato = random.choice(["rango","equivalencia"])
+            if tipoDato == "rango":
+                tituloCurioso = "Tu rango de oyente 🏆"
+                if minutosTotales < 2000:
+                    textoCurioso = "Explorador sonoro: Escuchas música para acompañar tus momentos, pero sin obsesionarte."
+                elif minutosTotales < 6000:
+                    textoCurioso = "Amante de la música: Tus audífonos son una parte muy importante de tu rutina diaria."
+                elif minutosTotales <12000:
+                    textoCurioso = "Melómano empedernido: Hay música sonando en tu cabeza casi todo el día"
+                else:
+                    textoCurioso = "Vives en spotify 👽: Prácticamente respiras música. Tus estadísticas no son de este planeta"
+            else:
+                tituloCurioso = "¿A qué equivale tu tiempo de escucha?"
+                opcionEquivalencia = random.choice(["shrek", "vuelos", "partidos","baños"])
+                if opcionEquivalencia == "shrek":
+                    veces = int(minutosTotales//90)
+                    textoCurioso = f"En lugar de escuchar música, podrías haber visto la primera película de Shrek {veces} veces este mes"
+                elif opcionEquivalencia == "vuelos":
+                    veces = int(minutosTotales//660)
+                    textoCurioso = f"Ese tiempo en música equivale a subirte a un avión y volar a Europa unas {veces} seguidas"
+                elif opcionEquivalencia == "partidos":
+                    veces = int(minutosTotales//90)
+                    textoCurioso = f"Tu tiempo de escucha es exactamente lo que durarían {veces} partidos de fútbol consecutivos"
+                else:
+                    textoCurioso = f"Ese tiempo es menor al de esperar por un baño limpio en CUCEI"
+
             slideActual = moldeSlide.replace("{{MES_ACTUAL}}", mes)
             slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
             slideActual = slideActual.replace("{{LISTA_ARTISTAS}}", htmlListaArtistas)
@@ -217,6 +244,9 @@ def mostrar_dashboardjson():
             slideActual = slideActual.replace("{{NOMBRE_VIBRA}}",vibra)
             slideActual = slideActual.replace("{{FRASE_ALEATORIA}}", fraseElegida)
             slideActual = slideActual.replace("{{GENEROS_CLAVE}}",textoGenerosClave)
+            slideActual = slideActual.replace("{{MINUTOS_TOTALES}}",f"{minutosTotales:,}")
+            slideActual = slideActual.replace("{{DATO_CURIOSO_TITULO}}", tituloCurioso)
+            slideActual = slideActual.replace("{{DATO_CURIOSO_TEXTO}}",textoCurioso)
 
             slideActual = slideActual.replace('\n', '')
             st.markdown(slideActual, unsafe_allow_html=True)

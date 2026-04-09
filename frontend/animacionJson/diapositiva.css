@@ -134,9 +134,8 @@
 }
 /*RESUMEN COMPLETO - SECCIÓN DEL FEELING (Tarjeta Final)*/
 /* Tarjeta contenedora de la vibra al final de la página */
-.slide-contenedor-vibra {
+.slide-contenedor-tarjeta {
     margin-top: 40px; 
-    margin-bottom: 30px;
     background-color: rgba(255, 255, 255, 0.05); 
     padding: 30px 20px;
     border-radius: 12px;
@@ -144,10 +143,23 @@
     max-width: 600px;
     text-align: center;
 }
+.minutos-gigantes {
+    font-size: 50px;
+    font-weight: bold;
+    color: #1DB954;
+    line-height: 1;
+    margin: 15px 0;
+}
+.minutos-texto {
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: normal;
+}
 /* El emoji o ícono gigante del feeling */
 .icono-vibra-gigante {
     font-size: 80px;
     line-height: 1;
+    margin:10px 0;
 }
 /* Textos genéricos dentro de la tarjeta de vibra */
 .slide-mensaje {
@@ -155,6 +167,13 @@
     margin: 10px 0;
     line-height: 1.5;
     color: #ffffff;
+    opacity: 0.9;
+}
+.slide-mensaje-destacado{
+    font-size:20px;
+    font-weight:bold;
+    color:#1db954;
+    margin:10px 0;
 }
 /* Resalte específico para el nombre de la vibra (la primera línea de texto) */
 .slide-mensaje:first-of-type {
