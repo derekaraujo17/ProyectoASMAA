@@ -97,7 +97,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px; 
+    gap: 12px;
 }
 /* Cada fila individual de la lista (li) */
 .elemento-lista {
