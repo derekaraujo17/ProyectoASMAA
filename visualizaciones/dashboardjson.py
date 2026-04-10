@@ -6,6 +6,7 @@ import unicodedata
 import base64
 import random
 from logica.motorjson import diccionarioVibras
+from datetime import datetime, timedelta
 
 def obtener_pibble_base64(nombreArtista, generoArtista):
     nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombreArtista) if unicodedata.category(c) != 'Mn'))
@@ -254,18 +255,26 @@ def mostrar_dashboardjson():
             st.markdown("<h2 class='slide-completo-titulo' style='margint-top:60px;'>Tus semanas de este mes</h2>",unsafe_allow_html=True)
             artistasSemanaMes = dfArtistasSemanal[dfArtistasSemanal["añoMesReproduccion"]==mes]
             semanasDelMes = artistasSemanaMes["semanaReproduccion"].unique()
+            semanasDelMes.sort()
             columnasSemanas = st.columns(min(3, len(semanasDelMes)))
             for index, semana in enumerate(semanasDelMes):
+                añoIso, numSemanaIso = semana.split('-')
+                fechaInicioSemana = datetime.strptime(f"{añoIso}-W{numSemanaIso}-1","%G-W%V-%u")
+                fechaFinSemana = fechaInicioSemana + timedelta(days=6)
+                mesesEspañolAbrev = ["ene", "feb", "mar", "abr", "may", "jun","jul","ago","sep","oct","nov","dic"]
+                strInicio = f"{fechaInicioSemana.day} {mesesEspañolAbrev[fechaInicioSemana.month-1]}"
+                strFin = f"{fechaFinSemana.day} {mesesEspañolAbrev[fechaFinSemana.month-1]}"
+                rangoFechas = f"{strInicio} al {strFin}"
                 top3Semana = artistasSemanaMes[artistasSemanaMes["semanaReproduccion"]==semana]
                 htmlFotos = ""
                 for url in top3Semana["urlFoto"]:
                     htmlFotos += f'<img src="{url}" class="foto-semana">'
-                numSemana = semana.split('-')[1]
                 tarjetaSemana = f"""
                 <div class="contenedor-semana">
-                <div class="semana-titulo">Semana {numSemana}</div>
-                <div class="fotos-top3-semana"></div>
+                <div class="semana-titulo">Semana {index+1}</div>
+                <div class="semana-fechas">{rangoFechas}</div> <div class="fotos-top3-semana">
                 {htmlFotos}
+                </div>
                 </div>"""
                 colActual = columnasSemanas[index % 3]
                 with colActual:
