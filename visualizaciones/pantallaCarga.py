@@ -13,10 +13,10 @@ def ejecutar_motor_json(archivos):
 def obtener_gif_base64(numero):
     rutasGifs = {
         1: "frontend/animacionCarga/links/pibble_edn.gif",
-        2: "frontend/animacionCarga/links/pibble_edn.gif",
-        3: "frontend/animacionCarga/links/pibble_edn.gif",
-        4: "frontend/animacionCarga/links/pibble_edn.gif",
-        5: "frontend/animacionCarga/links/pibble_edn.gif"
+        2: "frontend/animacionCarga/links/starkirk.gif",
+        3: "frontend/animacionCarga/links/tuff.gif",
+        4: "frontend/animacionCarga/links/pibble_dormido.gif",
+        5: "frontend/animacionCarga/links/tuffglow.gif"
     }
     ruta = rutasGifs.get(numero, rutasGifs[1])
     try:
