@@ -83,11 +83,7 @@ def mostrar_dashboardjson():
             colActual = cols[index%3]
             with colActual:
                 st.markdown(tarjetaActual, unsafe_allow_html=True)
-<<<<<<< HEAD
-                if st.button(f"Ver resumen de {mes}", key=f"btn_{mes}", use_container_width=True):
-=======
                 if st.button(f"Ver resumen de   {mes}", key=f"btn_{mes}", use_container_width=True):
->>>>>>> ddc4b12d419ed48945499b15efc94bbc38c0f2ec
                     st.session_state["pantallaMes"] = mes
                     st.rerun()
     else:
