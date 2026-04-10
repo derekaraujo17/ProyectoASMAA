@@ -3,15 +3,36 @@
 - etc.
 */
 
-#boton-login{
-    background-color: #4CAF50; /* Verde */
+#boton-login {
+    background: linear-gradient(135deg, #1DB954, #1ed760);
+    color: #ffffff;
     border: none;
-    color: white;
-    padding: 15px 32px;
+    border-radius: 12px;
+    width: fit-content;
+    padding: 0.6rem 1.4rem;
+    font-size: 0.85rem;
+    font-family: 'Press Start 2P', cursive;
+    letter-spacing: 1px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(29, 185, 84, 0.4);
 }
+#boton-login:hover {
+    background: linear-gradient(135deg, #1ed760, #3cff8f);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.7);
+}
+/*CLICK*/
+#boton-login:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 5px rgba(29, 185, 84, 0.5);
+}
+
+#boton-login:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.5);
+}
+

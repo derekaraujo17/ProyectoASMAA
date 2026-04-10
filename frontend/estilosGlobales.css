@@ -15,10 +15,32 @@ footer {
 [data-testid="stFooter"]{
     display: none;
 }
-
+/* Títulos Streamlit */
+[data-testid="stHeading"] h1 {
+    font-family: 'Press Start 2P', cursive !important;
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+/* Header personalizado */
+.custom-header .title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+}
+/* Subtítulos personalizados */
+.titulo-columna {
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
 /* Fuente para títulos */
 h1, h2, h3, .custom-header .title {
     font-family: 'Press Start 2P', cursive;
+}
+
+html, body, p, .custom-header{
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
 }
 
 :root {
