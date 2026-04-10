@@ -4,6 +4,9 @@ import os
 import re 
 import unicodedata
 import base64
+import random
+from logica.motorjson import diccionarioVibras
+from datetime import datetime, timedelta
 
 def obtener_pibble_base64(nombreArtista, generoArtista):
     nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombreArtista) if unicodedata.category(c) != 'Mn'))
@@ -80,7 +83,11 @@ def mostrar_dashboardjson():
             colActual = cols[index%3]
             with colActual:
                 st.markdown(tarjetaActual, unsafe_allow_html=True)
+<<<<<<< HEAD
                 if st.button(f"Ver resumen de {mes}", key=f"btn_{mes}", use_container_width=True):
+=======
+                if st.button(f"Ver resumen de   {mes}", key=f"btn_{mes}", use_container_width=True):
+>>>>>>> ddc4b12d419ed48945499b15efc94bbc38c0f2ec
                     st.session_state["pantallaMes"] = mes
                     st.rerun()
     else:
@@ -169,12 +176,120 @@ def mostrar_dashboardjson():
                 minutos = fila["minutosReproducidos"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlArtista}"><p class="nombre-artista">{nombreArtista} con un total de <span class="minutos-artista">{minutos}</span> minutos</p></li>'
                 htmlListaArtistas += elementoLi
+            vibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            emoji = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
+            frasesCreativas = {
+                # --- CULTURA HIP-HOP Y CALLE ---
+                "🎤 Rap & Hip-Hop": ["Barras, beats y flow sin parar.","Escupiendo rimas todo el mes.","El bombo y la caja marcan el ritmo de tus días.","Leyendas del micrófono en repetición constante."],
+                "🔥 Trap & Drill": ["Rompiendo el bajo en cada bocina.", "Modo calle activado este mes.","Mucho fronteo, hi-hats rápidos y actitud.","El sub-bajo retumba, la energía no baja."],
+                # --- URBANO Y REGIONAL LATINO ---
+                "🥵 Urbano Latino": ["Perreo intenso hasta abajo y sin miedo.","El dembow domina tus playlists.","Flow latino que pone a vibrar la calle.","Cero estrés, mucho reggaetón y buenas vibras."],
+                "🌮 Regional & Corridos": ["Pura guitarra sierreña y trompetas al cien.","Corridos que cuentan historias de principio a fin.","Con el sombrero puesto y la música a todo volumen.","Sentimiento ranchero que llega directo al pecho."],
+                "🌴 Tropical & Fiestero": ["Azúcar, sabor y ritmo que obliga a bailar.","Cumbia, salsa y bachata para mover los pies.","Tu mes fue una fiesta caribeña constante.","Clave, güiro y mucho movimiento en la pista."], 
+                # --- POP Y TENDENCIAS ---
+                "🪩 Pop Mainstream": ["Tus gustos están en el top de las listas.", "Pura energía pop para alegrar el día.","Estribillos pegadizos que cantaste a todo pulmón.","Los hits mundiales son la banda sonora de tu vida."],
+                "🌸 K-Pop & Asiático": ["Coreografías perfectas y melodías adictivas.","Todo un idol: tu mes estuvo lleno de brillo asiático.","Vocales increíbles y conceptos visuales en tu cabeza.","Fandom activado, apoyando a tus grupos favoritos."],
+                # --- NOSTALGIA Y ROMANCE ---
+                "🍷 Romántico & Cortavenas": ["Un mes para cantarle al desamor (o al amor).", "Preparando los pañuelos y las baladas.","Letras profundas que pegan justo en el sentimiento.","Dedicando canciones y suspirando con cada acorde."],
+                "📻 Nostalgia Retro": ["Un viaje en el tiempo a las mejores décadas doradas.","Los clásicos nunca mueren, y tu historial lo demuestra.","Hombreras, bolas de disco y sintetizadores vintage.","Como escuchar la radio en los viejos y buenos tiempos."],
+                # --- ENERGÍA Y CLUB ---
+                "⚡ Electrónica & Club": ["El drop perfecto te acompañó en cada momento.","BPMs altos para mantener la energía a tope.","Sintetizadores y luces de neón en tu mente.","Tu habitación se convirtió en el escenario principal."], 
+                # --- GUITARRAS Y BATERÍAS ---
+                "🎸 Rock Clásico & Hard": ["Solos de guitarra legendarios y mucha distorsión.","El espíritu del rock and roll sigue más vivo que nunca.","Baterías pesadas y actitud rebelde en tus oídos.","Levanta los cuernos, este mes fue puro poder eléctrico."],
+                "🖤 Metal & Oscuridad": ["Doble bombo, riffs pesados y mucha agresividad.","Oscuridad y volumen al máximo sin pedir permiso.","Rompiendo cuellos con los breakdowns más brutales.","Intensidad pura que hace temblar las paredes."],
+                "🌿 Indie & Alternativo": ["Fuera del mainstream, directo al alma.", "Guitarras suaves y mucha onda.","Descubriendo joyas ocultas y sonidos diferentes.","Melancolía bonita y letras que te hacen pensar."],
+                "🏕️ Country & Folk": ["Guitarras acústicas e historias junto a la fogata.","Raíces profundas y voces honestas cantando verdades.","Un respiro tranquilo con sabor a madera y naturaleza.","Melodías de carretera para viajes largos y atardeceres."],
+                # --- CHILL, SOUL Y RELAJACIÓN ---
+                "🎷 Soul & R&B": ["Voces sedosas y bajos que te hacen mover la cabeza.","Mucho groove, sentimiento puro y ritmos elegantes.","Vibras aterciopeladas para relajar cuerpo y mente.","El lado más sensual y emotivo de la música."],
+                "☁️ Chill & Lo-Fi": ["Beats relajados para estudiar, trabajar o solo existir.","Una taza de café, lluvia en la ventana y cero estrés.","Frecuencias bajas que calman la ansiedad del día a día.","El soundtrack perfecto para dejar la mente en blanco."],
+                "☕ Jazz & Blues": ["Improvisación, saxofones y acordes complejos.","La tristeza del blues transformada en arte puro.","Sofisticación musical en tiempos asincopados.","Elegancia clásica que nunca pasa de moda."],
+                # --- CONCENTRACIÓN Y ESTUDIO ---
+                "🎻 Clásica & Instrumental": ["Sinfonías magistrales y concentración absoluta.","Bandas sonoras épicas que elevan cualquier momento.","El poder de la música sin necesidad de una sola palabra.","Pianos, violines y arreglos que acarician el espíritu."],
+                # --- EL CASO NEUTRAL (EMPATE TOTAL) ---
+                "🔀 Variado": ["Un poquito de todo: no te casas con un solo género.","Tu historial es un caos hermoso de diferentes mundos.","Pasas del reggaetón al rock sin escalas y sin culpa.","¿Por qué elegir uno cuando puedes escucharlos todos?"]
+            }
+            listaFrases = frasesCreativas.get(vibra, ["Tus gustos musicales son únicos."])
+            fraseElegida = random.choice(listaFrases)
+            palabrasDeVibra = diccionarioVibras.get(vibra, ["Tu estilo único"])
+            cantidadGeneros = min(3, len(palabrasDeVibra))
+            generosElegidos = random.sample(palabrasDeVibra, cantidadGeneros)
+            textoGenerosClave = ", ".join(generosElegidos).title()
+
+            minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            tipoDato = random.choice(["rango","equivalencia"])
+            if tipoDato == "rango":
+                tituloCurioso = "Tu rango de oyente 🏆"
+                if minutosTotales < 2000:
+                    textoCurioso = "Explorador sonoro: Escuchas música para acompañar tus momentos, pero sin obsesionarte."
+                elif minutosTotales < 6000:
+                    textoCurioso = "Amante de la música: Tus audífonos son una parte muy importante de tu rutina diaria."
+                elif minutosTotales <12000:
+                    textoCurioso = "Melómano empedernido: Hay música sonando en tu cabeza casi todo el día"
+                else:
+                    textoCurioso = "Vives en spotify 👽: Prácticamente respiras música. Tus estadísticas no son de este planeta"
+            else:
+                tituloCurioso = "¿A qué equivale tu tiempo de escucha?"
+                opcionEquivalencia = random.choice(["shrek", "vuelos", "partidos","baños"])
+                if opcionEquivalencia == "shrek":
+                    veces = int(minutosTotales//90)
+                    textoCurioso = f"En lugar de escuchar música, podrías haber visto la primera película de Shrek {veces} veces este mes"
+                elif opcionEquivalencia == "vuelos":
+                    veces = int(minutosTotales//660)
+                    textoCurioso = f"Ese tiempo en música equivale a subirte a un avión y volar a Europa unas {veces} seguidas"
+                elif opcionEquivalencia == "partidos":
+                    veces = int(minutosTotales//90)
+                    textoCurioso = f"Tu tiempo de escucha es exactamente lo que durarían {veces} partidos de fútbol consecutivos"
+                else:
+                    textoCurioso = f"Ese tiempo es menor al de esperar por un baño limpio en CUCEI"
+
             slideActual = moldeSlide.replace("{{MES_ACTUAL}}", mes)
             slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
             slideActual = slideActual.replace("{{LISTA_ARTISTAS}}", htmlListaArtistas)
+            slideActual = slideActual.replace("{{EMOJI_VIBRA}}",emoji)
+            slideActual = slideActual.replace("{{NOMBRE_VIBRA}}",vibra)
+            slideActual = slideActual.replace("{{FRASE_ALEATORIA}}", fraseElegida)
+            slideActual = slideActual.replace("{{GENEROS_CLAVE}}",textoGenerosClave)
+            slideActual = slideActual.replace("{{MINUTOS_TOTALES}}",f"{minutosTotales:,}")
+            slideActual = slideActual.replace("{{DATO_CURIOSO_TITULO}}", tituloCurioso)
+            slideActual = slideActual.replace("{{DATO_CURIOSO_TEXTO}}",textoCurioso)
+
             slideActual = slideActual.replace('\n', '')
             st.markdown(slideActual, unsafe_allow_html=True)
             
+            st.markdown("<h2 class='slide-completo-titulo' style='margint-top:60px;'>Tus semanas de este mes</h2>",unsafe_allow_html=True)
+            artistasSemanaMes = dfArtistasSemanal[dfArtistasSemanal["añoMesReproduccion"]==mes]
+            semanasDelMes = artistasSemanaMes["semanaReproduccion"].unique()
+            semanasDelMes.sort()
+            columnasSemanas = st.columns(min(3, len(semanasDelMes)))
+            for index, semana in enumerate(semanasDelMes):
+                añoIso, numSemanaIso = semana.split('-')
+                fechaInicioSemana = datetime.strptime(f"{añoIso}-W{numSemanaIso}-1","%G-W%V-%u")
+                fechaFinSemana = fechaInicioSemana + timedelta(days=6)
+                mesesEspañolAbrev = ["ene", "feb", "mar", "abr", "may", "jun","jul","ago","sep","oct","nov","dic"]
+                strInicio = f"{fechaInicioSemana.day} {mesesEspañolAbrev[fechaInicioSemana.month-1]}"
+                strFin = f"{fechaFinSemana.day} {mesesEspañolAbrev[fechaFinSemana.month-1]}"
+                rangoFechas = f"{strInicio} al {strFin}"
+                top3Semana = artistasSemanaMes[artistasSemanaMes["semanaReproduccion"]==semana]
+                htmlFotos = ""
+                for url in top3Semana["urlFoto"]:
+                    htmlFotos += f'<img src="{url}" class="foto-semana">'
+                tarjetaSemana = f"""
+                <div class="contenedor-semana">
+                <div class="semana-titulo">Semana {index+1}</div>
+                <div class="semana-fechas">{rangoFechas}</div> <div class="fotos-top3-semana">
+                {htmlFotos}
+                </div>
+                </div>"""
+                colActual = columnasSemanas[index % 3]
+                with colActual:
+                    st.markdown(tarjetaSemana, unsafe_allow_html=True)
+                    if st.button(f"Explorar semana", key=f"btn_sem_{semana}", use_container_width=True):
+                        st.session_state["semana_elegida"] = semana
+                        st.session_state["paso_historia"] = 6
+                        st.rerun()
+            st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin: 40px 0;'></hr>",unsafe_allow_html=True)
+
+
             if st.button("Volver al resumen de todos los meses", use_container_width=True):
                 del st.session_state["pantallaMes"]
                 del st.session_state["paso_historia"]
