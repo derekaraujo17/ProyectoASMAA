@@ -181,3 +181,35 @@
     font-weight: bold;
     color: #1DB954;
 }
+.contenedor-semana{
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px 10px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);    
+}
+.semana-titulo {
+    color: #1DB954;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.fotos-top3-semana {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.foto-semana {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #121212; 
+    margin-left: -20px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.foto-semana:first-child {
+    margin-left: 0;
+}

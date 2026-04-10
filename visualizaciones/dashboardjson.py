@@ -251,6 +251,32 @@ def mostrar_dashboardjson():
             slideActual = slideActual.replace('\n', '')
             st.markdown(slideActual, unsafe_allow_html=True)
             
+            st.markdown("<h2 class='slide-completo-titulo' style='margint-top:60px;'>Tus semanas de este mes</h2>",unsafe_allow_html=True)
+            artistasSemanaMes = dfArtistasSemanal[dfArtistasSemanal["añoMesReproduccion"]==mes]
+            semanasDelMes = artistasSemanaMes["semanaReproduccion"].unique()
+            columnasSemanas = st.columns(min(3, len(semanasDelMes)))
+            for index, semana in enumerate(semanasDelMes):
+                top3Semana = artistasSemanaMes[artistasSemanaMes["semanaReproduccion"]==semana]
+                htmlFotos = ""
+                for url in top3Semana["urlFoto"]:
+                    htmlFotos += f'<img src="{url}" class="foto-semana">'
+                numSemana = semana.split('-')[1]
+                tarjetaSemana = f"""
+                <div class="contenedor-semana">
+                <div class="semana-titulo">Semana {numSemana}</div>
+                <div class="fotos-top3-semana"></div>
+                {htmlFotos}
+                </div>"""
+                colActual = columnasSemanas[index % 3]
+                with colActual:
+                    st.markdown(tarjetaSemana, unsafe_allow_html=True)
+                    if st.button(f"Explorar semana", key=f"btn_sem_{semana}", use_container_width=True):
+                        st.session_state["semana_elegida"] = semana
+                        st.session_state["paso_historia"] = 6
+                        st.rerun()
+            st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin: 40px 0;'></hr>",unsafe_allow_html=True)
+
+
             if st.button("Volver al resumen de todos los meses", use_container_width=True):
                 del st.session_state["pantallaMes"]
                 del st.session_state["paso_historia"]
