@@ -15,10 +15,10 @@ def obtener_gif_base64(numero):
         1: "frontend/animacionCarga/links/pibble_edn.gif",
         2: "frontend/animacionCarga/links/starkirk.gif",
         3: "frontend/animacionCarga/links/tuff.gif",
-        4: "frontend/animacionCarga/links/pibble_dormido.gif",
-        5: "frontend/animacionCarga/links/tuffglow.gif",
-        6: "frontend/animacionCarga/links/pibblewash.gif",
-        7: "frontend/animacionCarga/links/chipmunk.gif"
+        4: "frontend/animacionCarga/links/starkirk.gif",
+        5: "frontend/animacionCarga/links/starkirk.gif",
+        6: "frontend/animacionCarga/links/pibble_edn.gif",
+        7: "frontend/animacionCarga/links/tuff.gif"
     }
     ruta = rutasGifs.get(numero, rutasGifs[1])
     try:
