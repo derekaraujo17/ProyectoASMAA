@@ -16,7 +16,9 @@ def obtener_gif_base64(numero):
         2: "frontend/animacionCarga/links/starkirk.gif",
         3: "frontend/animacionCarga/links/tuff.gif",
         4: "frontend/animacionCarga/links/pibble_dormido.gif",
-        5: "frontend/animacionCarga/links/tuffglow.gif"
+        5: "frontend/animacionCarga/links/tuffglow.gif",
+        6: "frontend/animacionCarga/links/pibblewash.gif",
+        7: "frontend/animacionCarga/links/chipmunk.gif"
     }
     ruta = rutasGifs.get(numero, rutasGifs[1])
     try:
@@ -29,7 +31,7 @@ def mostrar_pantalla_carga():
     if "analisis_listo" not in st.session_state:
         st.session_state["analisis_listo"] = False
     if "animacion_elegida" not in st.session_state:
-        st.session_state["animacion_elegida"] = random.randint(1,5)
+        st.session_state["animacion_elegida"] = random.randint(1,7)
     if "ui_renderizada" not in st.session_state:
         st.session_state["ui_renderizada"] = False
     if "tiempo_inicio_carga" not in st.session_state:
