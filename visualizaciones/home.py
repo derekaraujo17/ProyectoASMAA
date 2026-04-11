@@ -1,9 +1,10 @@
 import streamlit as st
 import os
-from spotipy.oauth2 import SpotifyOAuth #lo que nos dará el inicio de sesión
+from spotipy.oauth2 import SpotifyOAuth
 import streamlit.components.v1 as components
 from dotenv import load_dotenv
 from visualizaciones.header import render_header
+import base64
 
 #load_dotenv()
 spotifyOauth=SpotifyOAuth(
@@ -12,6 +13,14 @@ spotifyOauth=SpotifyOAuth(
     redirect_uri="http://127.0.0.1:8501",
     scope="user-top-read user-read-recently-played"
 )
+
+def obtener_imagen_base64(rutaImagen):
+    try:
+        with open(rutaImagen, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
+        return f"data:image/png;base64, {encoded_string}"
+    except FileNotFoundError:
+        return ""
 
 def mostrar_pantalla_pibble():
     rutaCssGlobal = "frontend/estilosGlobales.css"
@@ -56,13 +65,20 @@ def mostrar_pantalla_pibble():
             codigoCss = f.read()
         with open(rutaJs, "r", encoding="utf-8") as f:
             codigoJs = f.read()
-        htmlFinal=codigoHtml.replace("urlspotiaqui",urlAutorizacion)
+        pibbleSuciob64 = obtener_imagen_base64("frontend/assets/pibble_sucio.png")
+        pibbleLimpiob64 = obtener_imagen_base64("frontend/assets/pibble_limpio.png")
+        estropajob64 = obtener_imagen_base64("frontend/assets/estropajo.png")
+        #variables a reemplazar en html, css, js
+        htmlFinal = codigoHtml.replace("urlspotiaqui", urlAutorizacion)
+        htmlFinal = htmlFinal.replace("{{PIBBLE_SUCIO}}", pibbleSuciob64)
+        htmlFinal = htmlFinal.replace("{{PIBBLE_LIMPIO}}",pibbleLimpiob64)
+        codigoCss = codigoCss.replace("{{ESTROPAJO}}", estropajob64)
+
         paqueteCompleto = f"""
         <style>{codigoCss}</style>
         {htmlFinal}
         <script>{codigoJs}</script>
         """
-        
-        st.markdown(paqueteCompleto, unsafe_allow_html=True)
+        components.html(paqueteCompleto, height=500, scrolling=False)        
     except:
         st.warning(f"Esperando el archivo frontend")
