@@ -15,7 +15,7 @@ def obtener_gif_base64(numero):
         1: "frontend/animacionCarga/links/pibble_edn.gif",
         2: "frontend/animacionCarga/links/starkirk.gif",
         3: "frontend/animacionCarga/links/tuff.gif",
-        4: "frontend/animacionCarga/links/starkirk.gif",
+        4: "frontend/animacionCarga/links/pibble_edn.gif",
         5: "frontend/animacionCarga/links/starkirk.gif",
         6: "frontend/animacionCarga/links/pibble_edn.gif",
         7: "frontend/animacionCarga/links/tuff.gif"
