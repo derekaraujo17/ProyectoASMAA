@@ -219,3 +219,61 @@
 .foto-semana:first-child {
     margin-left: 0;
 }
+
+.slide-semanal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+    color: #ffffff;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.semana-fechas-grandes {
+    font-size: 18px;
+    color: #ffffff;
+    opacity: 0.7;
+    margin-top: -20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.contenedor-dos-columnas {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 30px; 
+    margin-bottom: 40px;
+}
+
+.columna-lista {
+    flex: 1; 
+    min-width: 0;
+}
+
+.tarjeta-tiempo-semanal {
+    max-width: 700px;
+    width: 100%;
+}
+
+.estadisticas-dobles {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.estadistica-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .contenedor-dos-columnas {
+        flex-direction: column;
+    }
+}

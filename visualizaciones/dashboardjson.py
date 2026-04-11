@@ -284,7 +284,53 @@ def mostrar_dashboardjson():
                         st.session_state["paso_historia"] = 6
                         st.rerun()
             st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin: 40px 0;'></hr>",unsafe_allow_html=True)
+        elif paso == 6:
+            semana = st.session_state["semana_elegida"]
+            rutaHtmlDiapositiva6 = "frontend/animacionJson/slideSemanal.html"
+            with open(rutaHtmlDiapositiva6, "r", encoding="utf-8") as f:
+                moldeSlide = f.read()
+            artistasSemana = dfArtistasSemanal[dfArtistasSemanal["semanaReproduccion"]==semana]
+            cancionesSemana = dfCancionesSemanal[dfCancionesSemanal["semanaReproduccion"]==semana]
+            datosTiempo = tiempoSemanal[tiempoSemanal["semanaReproduccion"]==semana]
+            añoIso, numSemanaIso = semana.split('-')
+            fechaInicioSemana = datetime.strptime(f"{añoIso}-W{numSemanaIso}-1","%G-W%V-%u")
+            fechaFinSemana = fechaInicioSemana + timedelta(days=6)
+            mesesEspañolAbrev = ["ene", "feb", "mar", "abr", "may", "jun","jul","ago","sep","oct","nov","dic"]
+            strInicio = f"{fechaInicioSemana.day} {mesesEspañolAbrev[fechaInicioSemana.month-1]}"
+            strFin = f"{fechaFinSemana.day} {mesesEspañolAbrev[fechaFinSemana.month-1]}"
+            rangoFechas = f"{strInicio} al {strFin}"            
+            htmlListaArtistas = ""
+            for index, fila in artistasSemana.head(3).iterrows():
+                urlFoto = fila["urlFoto"]
+                nombreArtista = fila["artistName"]
+                minutos = fila["totalMinutosArt"]
+                htmlListaArtistas += f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlFoto}"><p class="nombre-artista">{nombreArtista} <br><span class="minutos-artista">{minutos:,} min</span></p></li>'
+                
+            htmlListaCanciones = ""
+            for index, fila in cancionesSemana.head(3).iterrows():
+                urlPortada = fila["urlPortada"]
+                nombreCancion = fila["trackName"]
+                nombreArtista = fila["artistName"]
+                htmlListaCanciones += f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlPortada}"><p class="nombre-cancion">{nombreCancion} <br><span style="font-size: 14px; opacity: 0.7;">de {nombreArtista}</span></p></li>'
+                
+            minutosTotales = datosTiempo["totalMinutosSem"].iloc[0] if not datosTiempo.empty else 0
+            
+            cancionesTotales = datosTiempo["cantidadEscuchasSem"].iloc[0] if not datosTiempo.empty else 0 
 
+            slideActual = moldeSlide.replace("{{NUM_SEMANA}}", numSemanaIso)
+            slideActual = slideActual.replace("{{RANGO_FECHAS}}", rangoFechas)
+            slideActual = slideActual.replace("{{LISTA_ARTISTAS}}", htmlListaArtistas)
+            slideActual = slideActual.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
+            slideActual = slideActual.replace("{{MINUTOS_TOTALES}}", f"{int(minutosTotales):,}")
+            slideActual = slideActual.replace("{{CANCIONES_TOTALES}}", f"{int(cancionesTotales):,}")
+            
+            slideActual = slideActual.replace('\n', '')
+            st.markdown(slideActual, unsafe_allow_html=True)
+
+            st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin: 40px 0;'>", unsafe_allow_html=True)
+            if st.button("Volver al mes", use_container_width=True):
+                st.session_state["paso_historia"] = 5  
+                st.rerun()            
 
             if st.button("Volver al resumen de todos los meses", use_container_width=True):
                 del st.session_state["pantallaMes"]
