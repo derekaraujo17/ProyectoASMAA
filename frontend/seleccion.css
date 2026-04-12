@@ -11,8 +11,6 @@ Para cambiar los botones de Streamlit, su CSS debe ser: [data-testid="stBaseButt
 Para cambiar los textos que agregué con st.markdown, pueden usar la clase que les puse: .titulo-columna { ... }
 esto es un poco de lo que vi quepodrían hacer, pero de igual forma ustedes investíguenlo
 
-para modificar las fotos que agregué, suban las fotos a internet, y luego, cambiaremos el link en seleccion.py para que se vea
-esa imagen
 para este caso van a tener que usar operadores estructurales,así que igual que los operadores de id, de clase, etc.
 tendrán que aprender a usar estos para estilizar cada botón por separado
 este puede ser un ejemplo, pero adelante con ustedes

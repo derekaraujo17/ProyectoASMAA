@@ -1,5 +1,14 @@
 import streamlit as st
 from visualizaciones.header import render_header
+import base64
+
+def obtener_imagen_base64(rutaImagen):
+     try:
+        with open(rutaImagen, "rb") as imageFile:
+           encoded_string = base64.b64encode(imageFile.read()).decode()
+        return f"data:image/png;base64,{encoded_string}"
+     except FileNotFoundError:
+        return ""
 
 def cargarArchivos(archivosSubidos):
             archivosValidos=[]
@@ -8,27 +17,31 @@ def cargarArchivos(archivosSubidos):
             return archivosValidos
         
 def mostrar_pantalla_botones():
-    #conexión con css
+    render_header()
+    st.title("Elegir la opción de los datos")
+    pibbleFondob64 = obtener_imagen_base64("frontend/assets/pibble_brazos.png")
+
     rutaCssGlobal="frontend/estilosGlobales.css"
+    rutaCssSeleccion="frontend/seleccion.css"
+    cssInyectado = f"""<style>:root {{--fondo-pibble: url('pibbleFondob64')}}"""
     try:
         with open(rutaCssGlobal,"r",encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+            cssInyectado += f.read() + "\n"
     except FileNotFoundError:
         pass
-    rutaCssSeleccion="frontend/seleccion.css"
     try:
         with open(rutaCssSeleccion, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+            cssInyecyado += f.read() + "\n"
     except FileNotFoundError:
         st.warning("Esperando el archivo frontend")
-    st.title("Elegir la opción de los datos")
-    render_header()
-    col1, col2 = st.columns(2)
+    cssInyecado += "</style>"
+    st.markdown(cssInyectado, unsafe_allow_html=True)
+
+    col1, colCentro, col2 = st.columns([1, 1.5, 1])
 
     with col1:
         #botón json
         st.markdown("<h3 class='titulo-columna'>Analizar historial json</h3>",unsafe_allow_html=True)
-        st.markdown("<img src='fotobotonjson' class='foto-seleccion-json'>",unsafe_allow_html=True)
         archivosSubidos = st.file_uploader("Sube tus archivos JSON", accept_multiple_files=True, type=["json"])
         jsonValidos = cargarArchivos(archivosSubidos)
         if len(jsonValidos)>=1:
@@ -39,10 +52,11 @@ def mostrar_pantalla_botones():
                 st.rerun()
         elif (len(archivosSubidos)>0):
              st.error("Por favor, sube los archivos de 'StreamingHistory_music' que descargaste de spotify")
+    with colCentro:
+        st.empty()
     with col2:
         #botón oauth
         st.markdown("<h3 class='titulo-columna'>Conectar con spotify</h3>",unsafe_allow_html=True)
-        st.markdown("<img src='fotobotonoauth' class='foto-seleccion-oauth'>",unsafe_allow_html=True)
         if st.button("Datos actuales", disabled=len(jsonValidos)>0):
             st.session_state["motor"] = "motoroauth"
             st.session_state["pantalla_actual"] = "pantallaCarga"
