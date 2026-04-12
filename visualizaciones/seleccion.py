@@ -31,10 +31,10 @@ def mostrar_pantalla_botones():
         pass
     try:
         with open(rutaCssSeleccion, "r", encoding="utf-8") as f:
-            cssInyecyado += f.read() + "\n"
+            cssInyectado += f.read() + "\n"
     except FileNotFoundError:
         st.warning("Esperando el archivo frontend")
-    cssInyecado += "</style>"
+    cssInyectado += "</style>"
     st.markdown(cssInyectado, unsafe_allow_html=True)
 
     col1, colCentro, col2 = st.columns([1, 1.5, 1])
