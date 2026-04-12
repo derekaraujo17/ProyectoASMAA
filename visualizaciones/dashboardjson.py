@@ -58,6 +58,15 @@ def mostrar_dashboardjson():
             st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
         except:
             st.warning(f"Esperando el archivo frontend")
+        if st.button("Volver a la selección"):
+            st.session_state["pantalla_actual"] = "seleccion"
+            if "resultados" in st.session_state:
+                del st.session_state["resultados"]
+            if "jsonValidos" in st.session_state:
+                del st.session_state["jsonValidos"]
+            if "motor" in st.session_state:
+                del st.session_state["motor"]
+            st.rerun()
         cols = st.columns(3) 
 
         for index, mes in enumerate(meses):
@@ -78,7 +87,7 @@ def mostrar_dashboardjson():
             tarjetaActual = tarjetaActual.replace("{{EMOJI_VIBRA}}",emojiVibra)
             tarjetaActual = tarjetaActual.replace("{{PORCENTAJE}}", str(porcentaje))
             tarjetaActual = tarjetaActual.replace("{{MINUTOS_TOTALES}}",str(minutos))
-            tarjetaActual = tarjetaActual.replace("{{IMAGEN_PIBBLE}}",imagenPibbleBase64)
+            tarjetaActual = tarjetaActual.replace("{{IMAGEN_PIBBLE}}",imagenPibbleBase64)  
 
             colActual = cols[index%3]
             with colActual:
@@ -284,6 +293,11 @@ def mostrar_dashboardjson():
                         st.session_state["paso_historia"] = 6
                         st.rerun()
             st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin: 40px 0;'></hr>",unsafe_allow_html=True)
+            st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin:40px 0;'>",unsafe_allow_html=True)
+            if st.button("Volver al resumen de todos los meses",use_container_width=True):
+              del st.session_state["pantallaMes"]
+              del st.session_state["paso_historia"]
+              st.rerun()  
         elif paso == 6:
             semana = st.session_state["semana_elegida"]
             rutaHtmlDiapositiva6 = "frontend/animacionJson/slideSemanal.html"
@@ -332,7 +346,7 @@ def mostrar_dashboardjson():
                 st.session_state["paso_historia"] = 5  
                 st.rerun()            
 
-            if st.button("Volver al resumen de todos los meses", use_container_width=True):
+            if st.button("Volver al resumen de todos los meses", key="btn_volver_meses_paso6" ,use_container_width=True):
                 del st.session_state["pantallaMes"]
                 del st.session_state["paso_historia"]
                 st.rerun()
