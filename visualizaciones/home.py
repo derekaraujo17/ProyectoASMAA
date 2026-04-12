@@ -18,7 +18,7 @@ def obtener_imagen_base64(rutaImagen):
     try:
         with open(rutaImagen, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
-        return f"data:image/png;base64, {encoded_string}"
+        return f"data:image/png;base64,{encoded_string}"
     except FileNotFoundError:
         return ""
 
@@ -26,7 +26,8 @@ def mostrar_pantalla_pibble():
     rutaCssGlobal = "frontend/estilosGlobales.css"
     try: 
         with open(rutaCssGlobal, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
+            cssGlobal = f.read()
+            st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
         pass
     
@@ -75,10 +76,30 @@ def mostrar_pantalla_pibble():
         codigoCss = codigoCss.replace("{{ESTROPAJO}}", estropajob64)
 
         paqueteCompleto = f"""
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="color-scheme" content="dark light">
+        <style>html, body{{background-color:transparent !important; background:transparent !important; color-scheme:dark; margin:0; padding:0;}}</style>
+        <style>{cssGlobal}</style>
         <style>{codigoCss}</style>
+        </head>
+        <body>
         {htmlFinal}
         <script>{codigoJs}</script>
+        </body>
+        </html>
         """
-        components.html(paqueteCompleto, height=500, scrolling=False)        
+        htmlb64 = base64.b64encode(paqueteCompleto.encode('utf-8')).decode('utf-8')
+        iframeCode = f'''<iframe
+        src="data:text/html;base64,{htmlb64}"
+        width="100%"
+        height="500px"
+        allowtransparency="true"
+        style="border:none; background:transparent;"
+        sandbox="allow-scripts allow-same-origin allow-top-navigation"
+        ></iframe>'''
+        st.markdown(iframeCode, unsafe_allow_html=True)    
     except:
         st.warning(f"Esperando el archivo frontend")
