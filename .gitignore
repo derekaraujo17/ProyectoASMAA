@@ -214,3 +214,4 @@ spotifyCache.db
 
 #configuraciones locales del editor
 .vscode/
+.streamlit/
