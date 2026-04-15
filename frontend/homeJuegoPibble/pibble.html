@@ -1,7 +1,21 @@
-
 <div id="contenedor-pibble">
-<img src="{{PIBBLE_SUCIO}}" id="panza" alt="Pibble Sucio">
-<a href="urlspotiaqui" target="_top" id="boton-login" style="display: block;">
-Iniciar sesión con Spotify
-</a>
+    <div class="titulo-pibble">¡YO SOY PIBBLE! ¡LÁVAME LA PANCITA!</div>
+
+    <div id="contenedor-imagen">
+        <img src="{{PIBBLE_LIMPIO}}" id="pibble-limpio" alt="Pibble Limpio">
+        <img src="{{PIBBLE_SUCIO}}" id="pibble-sucio" alt="Pibble Sucio">
+        <canvas id="canvas-limpieza"></canvas>
+    </div>
+
+    <div id="barra-container">
+        <div id="barra-progreso"></div>
+    </div>
+
+    <div class="titulo-pibble" id="mensaje">
+    ¡Pibble está limpio un <span id="porcentaje">0%</span>!
+    </div>
+
+    <a href="urlspotiaqui" target="_top" id="boton-login">
+        Iniciar sesión con Spotify
+    </a>
 </div>

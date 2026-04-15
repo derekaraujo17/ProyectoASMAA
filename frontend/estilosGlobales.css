@@ -8,6 +8,7 @@
 [data-testid="stToolbar"] {
     display: none;
 }
+
 /* Ocultar footer */
 footer {
     visibility: hidden;
@@ -167,4 +168,47 @@ html, body, p, .custom-header{
 * {
     scrollbar-width: thin;
     scrollbar-color: #8a2be2 #000000; /* thumb | track */
+}
+
+#contenedor-imagen {
+    position: relative;
+    width: 260px;
+    height: 260px;
+}
+
+#pibble-limpio,
+#pibble-sucio {
+    max-width: 260px;
+    height: auto;
+}
+
+/* Eliminar el fondo blanco del contenedor de iframes en Streamlit */
+[data-testid="stMarkdownContainer"] iframe {
+    background: transparent !important;
+}
+
+/* Contenedor del elemento incrustado */
+[data-testid="stMarkdownContainer"] {
+    background: transparent !important;
+}
+
+/* Elimina el fondo del bloque que contiene el iframe */
+[data-testid="stVerticalBlock"] {
+    background: transparent !important;
+}
+
+/* Contenedor principal del elemento */
+[data-testid="element-container"] {
+    background: transparent !important;
+}
+
+/* Evita cualquier fondo blanco residual */
+iframe {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* Asegura que toda la app mantenga el fondo oscuro */
+section.main > div {
+    background-color: transparent !important;
 }
