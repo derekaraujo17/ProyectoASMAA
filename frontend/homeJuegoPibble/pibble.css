@@ -4,6 +4,42 @@
 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* Tablets */
+@media (max-width: 768px) {
+    #contenedor-imagen {
+        max-width: 220px;
+    }
+
+    #barra-container {
+        max-width: 260px;
+    }
+
+    #boton-login {
+        font-size: 0.65rem;
+    }
+}
+
+/* Teléfonos */
+@media (max-width: 480px) {
+    .titulo-pibble {
+        font-size: 10px;
+    }
+
+    #contenedor-imagen {
+        width: 85vw;
+    }
+
+    #barra-container {
+        width: 85vw;
+    }
+
+    #boton-login {
+        width: 90%;
+        font-size: 0.6rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -16,8 +52,10 @@ body {
 
 html {
     background: transparent;
+    touch-action: manipulation;
 }
 
+/* Contenedor principal */
 #contenedor-pibble {
     display: flex;
     flex-direction: column;
@@ -27,13 +65,17 @@ html {
     text-align: center;
     padding: 20px;
     background: transparent;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
 }
 
+/* Texto */
 .titulo-pibble {
     font-family: 'Press Start 2P', cursive;
-    font-size: 14px;
     color: #ffffff;
-    margin-bottom: 10px;
+    font-size: clamp(10px, 2.5vw, 14px);
+    line-height: 1.5;
 }
 
 canvas {
@@ -41,27 +83,31 @@ canvas {
     height: 100%;
 }
 
+/* Imagen del juego */
 #contenedor-imagen {
     position: relative;
-    width: 260px;
-    height: 406px; /* Proporción de 400x625 */
+    width: min(70vw, 260px);
+    aspect-ratio: 400 / 625; /* Mantiene la proporción original */
+    margin: 0 auto;
     overflow: hidden;
 }
 
+/* Capas del juego */
 #pibble-limpio,
 #pibble-sucio,
 #canvas-limpieza {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0; /* Equivalente a top:0; right:0; bottom:0; left:0 */
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    object-position: center;
     border-radius: 12px;
 }
 
 #pibble-limpio,
 #pibble-sucio {
-    object-fit: contain; /* Mantiene la proporción */
+    object-fit: contain;
     pointer-events: none;
 }
 
@@ -80,7 +126,7 @@ canvas {
 }
 
 #barra-container {
-    width: 300px;
+    width: min(70vw, 300px);
     height: 12px;
     background-color: #1a1a1a;
     border-radius: 10px;
@@ -92,15 +138,15 @@ canvas {
     width: 0%;
     height: 100%;
     background: linear-gradient(90deg, #8a2be2, #a855f7);
-    transition: width 0.4s ease;
+    transition: width 0.25s ease-out;
 }
 
+/* Botón de Spotify */
 #boton-login {
     background: linear-gradient(135deg, #1DB954, #1ed760);
     color: #ffffff;
     border: none;
     border-radius: 12px;
-    width: fit-content;
     padding: 0.6rem 1.4rem;
     font-size: 0.75rem;
     font-family: 'Press Start 2P', cursive;
@@ -121,7 +167,5 @@ canvas {
 }
 
 #boton-login.activo:hover {
-    background: linear-gradient(135deg, #1ed760, #3cff8f);
     transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(29, 185, 84, 0.7);
 }

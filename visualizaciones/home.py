@@ -80,6 +80,7 @@ def mostrar_pantalla_pibble():
         <html lang="es">
         <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="color-scheme" content="dark light">
         <style>html, body{{background-color:transparent !important; background:transparent !important; color-scheme:dark; margin:0; padding:0;}}</style>
         <style>{cssGlobal}</style>
@@ -95,7 +96,7 @@ def mostrar_pantalla_pibble():
         iframeCode = f'''<iframe
         src="data:text/html;base64,{htmlb64}"
         width="100%"
-        height="700px"
+        height = 700 if st.session_state.get("is_mobile", False) else 750
         allowtransparency="true"
         style="border:none; background:transparent;"
         sandbox="allow-scripts allow-same-origin allow-top-navigation"
