@@ -154,10 +154,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function iniciarDibujo(e) {
         dibujando = true;
+        canvas.classList.add("canvas-activo");
+
         const pos = obtenerPosicion(e);
         limpiar(pos.x, pos.y);
         actualizarProgreso();
     }
+
 
     let contador = 0;
 
@@ -176,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function detenerDibujo() {
         dibujando = false;
-        actualizarProgreso();
+        canvas.classList.remove("canvas-activo");
     }
 
     canvas.addEventListener("mousedown", iniciarDibujo);

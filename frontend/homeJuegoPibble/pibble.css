@@ -4,6 +4,44 @@
 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* Hover para computadoras */
+@media (hover: hover) and (pointer: fine) {
+    #canvas-limpieza:hover {
+        transform: scale(1.03);
+        filter: brightness(1.1);
+    }
+}
+
+/* Hover en computadoras */
+@media (hover: hover) and (pointer: fine) {
+    #boton-login.activo:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(29, 185, 84, 0.7);
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #canvas-limpieza {
+        cursor: url("{{ESTROPAJO}}") 16 16, pointer;
+    }
+}
+
+/* Active en celulares */
+@media (hover: none) and (pointer: coarse) {
+    #boton-login.activo:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+    }
+}
+
+/* Active para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+    #canvas-limpieza:active {
+        transform: scale(0.97);
+        filter: brightness(0.9);
+    }
+}
+
 /* Tablets */
 @media (max-width: 768px) {
     #contenedor-imagen {
@@ -16,6 +54,7 @@
 
     #boton-login {
         font-size: 0.65rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 }
 
@@ -123,6 +162,7 @@ canvas {
     z-index: 3;
     cursor: url("{{ESTROPAJO}}") 16 16, auto;
     touch-action: none;
+    transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 #barra-container {
