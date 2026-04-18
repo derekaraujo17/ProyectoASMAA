@@ -30,4 +30,4 @@ elif st.session_state["pantalla_actual"] == "dashboardjson":
     dashboardjson.mostrar_dashboardjson()
 #cuando creemos el dashboard de oauth
 elif st.session_state["pantalla_actual"] == "dashboardoauth":
-    st.title("dashboard de oauth")
+    dashboardoauth.mostrar_dashboardoauth()

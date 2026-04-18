@@ -1,0 +1,63 @@
+/* frontend/animacionOauth/ticket.css */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+.contenedor-recibo {
+    background-color: #f7f7f7; /* Color papel viejo */
+    color: #111; /* Letra negra de tinta */
+    width: 350px;
+    padding: 30px 20px;
+    font-family: 'Space Mono', monospace; /* Tipografía de ticket */
+    text-transform: uppercase;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin: 20px auto;
+}
+
+/* Efecto de líneas separadoras del ticket */
+.linea-punteada {
+    border-bottom: 2px dashed #333;
+    margin: 15px 0;
+}
+
+.cabecera-recibo { text-align: center; }
+.cabecera-recibo h2 { margin: 0 0 10px 0; font-size: 24px; }
+.cabecera-recibo p { margin: 3px 0; font-size: 12px; }
+
+.titulos-columnas {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Las filas que inyecta Python */
+.ticket-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.ticket-num { width: 15%; }
+.ticket-info { width: 65%; display: flex; flex-direction: column; }
+.ticket-duracion { width: 20%; text-align: right; }
+
+.ticket-cancion { font-weight: bold; }
+.ticket-artista { font-size: 10px; opacity: 0.8; }
+
+.totales {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.gracias { text-align: center; font-size: 14px; }
+.codigo-barras {
+    font-family: 'Libre Barcode 39 Extended', cursive; /* O simularlo con caracteres */
+    font-size: 40px;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 2px;
+}

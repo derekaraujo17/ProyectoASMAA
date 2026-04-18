@@ -10,6 +10,11 @@ def ejecutar_motor_json(archivos):
     from logica.motorjson import procesarDatosJson
     return procesarDatosJson(archivos)
 
+@st.cache_data(show_spinner=False)
+def ejecutar_motor_oauth(token):
+    from logica.motoroauth import ticket
+    return ticket(token)
+
 def obtener_gif_base64(numero):
     rutasGifs = {
         1: "frontend/animacionCarga/links/pibble_edn.gif",
@@ -94,10 +99,20 @@ def mostrar_pantalla_carga():
                     st.error(f"Error al analizar los datos: {e}")
                     
             elif st.session_state["motor"] == "motoroauth":
-                time.sleep(10)
-                st.session_state["analisis_listo"] = True
-                st.rerun()
-
+                try:
+                    tiempoInicio = time.time()
+                    token = st.session_state.get("tokenSpotify")
+                    resultados = ejecutar_motor_oauth(token)
+                    st.session_state["resultados_oauth"] = resultados
+                    tiempoTranscurrido = time.time()-tiempoInicio
+                    tiempoMinimo = 10.0
+                    if tiempoTranscurrido < tiempoMinimo:
+                        tiempoRestante = tiempoMinimo - tiempoTranscurrido
+                        time.sleep(tiempoRestante)
+                    st.session_state["analisis_listo"] = True
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error al conectar con Spotify: {e}")
     else:
         render_header()
         st.success("Pibble terminó el análisis")
