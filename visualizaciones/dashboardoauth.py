@@ -45,6 +45,7 @@ def mostrar_dashboardoauth():
     htmlFinal = moldeHtml.replace("{{FECHA_HOY}}",fechaHoy)
     htmlFinal = htmlFinal.replace("{{CANTIDAD_ITEMS}}", str(len(datosTicket)))
     htmlFinal = htmlFinal.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
+    htmlFinal = htmlFinal.replace('\n', '')
     st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
     st.markdown(htmlFinal, unsafe_allow_html=True)
     
