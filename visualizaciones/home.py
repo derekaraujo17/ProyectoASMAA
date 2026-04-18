@@ -96,7 +96,7 @@ def mostrar_pantalla_pibble():
         iframeCode = f'''<iframe
         src="data:text/html;base64,{htmlb64}"
         width="100%"
-        height = 800 if st.session_state.get("is_mobile", False) else 850
+        height = 950 if st.session_state.get("is_mobile", False) else 950
         allowtransparency="true"
         style="border:none; background:transparent;"
         sandbox="allow-scripts allow-same-origin allow-top-navigation"

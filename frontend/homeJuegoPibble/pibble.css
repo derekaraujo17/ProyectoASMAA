@@ -4,7 +4,6 @@
 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-
 /* Hover en computadoras */
 @media (hover: hover) and (pointer: fine) {
     #boton-login.activo:hover {
@@ -27,27 +26,12 @@
     }
 }
 
-/* Active para dispositivos táctiles */
-@media (hover: none) and (pointer: coarse) {
-    #canvas-limpieza:active {
-        transform: scale(0.97);
-        filter: brightness(0.9);
-    }
-}
-/*Pantallas grandes*/
-@media (min-width: 1024px) {
-    #barra-container {
-        max-width: 300px;
-    }
-
-    #boton-login {
-        font-size: 0.75rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-}
-
 /* Tablets */
 @media (max-width: 768px) {
+    #contenedor-imagen {
+        max-width: 220px;
+    }
+
     #barra-container {
         max-width: 260px;
     }
@@ -61,7 +45,7 @@
 /* Teléfonos */
 @media (max-width: 480px) {
     .titulo-pibble {
-        font-size: 10px;
+        font-size: 20px;
     }
 
     #contenedor-imagen {
@@ -75,7 +59,7 @@
     #boton-login {
         width: 90%;
         font-size: 0.6rem;
-        padding: 0.5rem 1rem;
+        padding: 1rem 1rem;
     }
 }
 
@@ -83,12 +67,10 @@ body {
     margin: 0;
     padding: 0;
     background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     height: auto;
+    overflow-y: auto;
 }
-
 html {
     background: transparent;
     touch-action: manipulation;
@@ -99,21 +81,16 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 15px;
-    text-align: center;
-    padding: 20px;
-    background: transparent;
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
+    padding: 40px 20px; /* Más espacio arriba y abajo */
+    min-height: 100vh;   /* Asegura que ocupe al menos toda la pantalla */
+    justify-content: flex-start; /* Empieza desde arriba, no desde el centro */
 }
 
 /* Texto */
 .titulo-pibble {
     font-family: 'Press Start 2P', cursive;
     color: #ffffff;
-    font-size: clamp(10px, 2.5vw, 14px);
+    font-size: clamp(25px, 2.5vw, 14px);
     line-height: 1.5;
 }
 
@@ -125,24 +102,27 @@ canvas {
 /* Imagen del juego */
 #contenedor-imagen {
     position: relative;
-    width: min(90vw, 260px);
-    aspect-ratio: 260 / 406; /* Mantiene la proporción original */
+    width: 400px;
+    max-width: 90vw;
+    aspect-ratio: 260 / 406;
+    border-radius: 40px;
     margin: 0 auto;
     overflow: hidden;
-    display: block; /* Evita que el contenedor se redimensione al cambiar el tamaño de la ventana */
-}
+    }
+
 
 /* Capas del juego */
 #pibble-limpio,
 #pibble-sucio,
 #canvas-limpieza {
+    image-rendering: auto;
     position: absolute;
     inset: 0; /* Equivalente a top:0; right:0; bottom:0; left:0 */
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
-    border-radius: 12px;
+    border-radius: 30px;
 }
 
 #pibble-limpio,
@@ -167,8 +147,8 @@ canvas {
 }
 
 #barra-container {
-    width: min(90vw, 520px);
-    height: 12px;
+    width: min(80vw, 600px);
+    height: 20px;
     background-color: #1a1a1a;
     border-radius: 10px;
     overflow: hidden;

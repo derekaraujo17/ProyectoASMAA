@@ -170,18 +170,6 @@ html, body, p, .custom-header{
     scrollbar-color: #8a2be2 #000000; /* thumb | track */
 }
 
-#contenedor-imagen {
-    position: relative;
-    width: 260px;
-    height: 260px;
-}
-
-#pibble-limpio,
-#pibble-sucio {
-    max-width: 260px;
-    height: auto;
-}
-
 /* Eliminar el fondo blanco del contenedor de iframes en Streamlit */
 [data-testid="stMarkdownContainer"] iframe {
     background: transparent !important;

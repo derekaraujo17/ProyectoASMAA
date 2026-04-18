@@ -20,27 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
         canvas.width = rect.width;
         canvas.height = rect.height;
 
-        ctx.globalCompositeOperation = "source-over";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const imgW = pibbleSucio.naturalWidth;
-        const imgH = pibbleSucio.naturalHeight;
+        const img = pibbleSucio;
 
-        const canvasRatio = canvas.width / canvas.height;
-        const imgRatio = imgW / imgH;
+        const naturalRatio = img.naturalWidth / img.naturalHeight;
+        const containerRatio = rect.width / rect.height;
 
         let drawWidth, drawHeight, offsetX, offsetY;
 
         // Simula object-fit: contain
-        if (imgRatio > canvasRatio) {
-            drawWidth = canvas.width;
-            drawHeight = canvas.width / imgRatio;
+        if (naturalRatio > containerRatio) {
+            drawWidth = rect.width;
+            drawHeight = rect.width / naturalRatio;
             offsetX = 0;
-            offsetY = (canvas.height - drawHeight) / 2;
+            offsetY = (rect.height - drawHeight) / 2;
         } else {
-            drawHeight = canvas.height;
-            drawWidth = canvas.height * imgRatio;
-            offsetX = (canvas.width - drawWidth) / 2;
+            drawHeight = rect.height;
+            drawWidth = rect.height * naturalRatio;
+            offsetX = (rect.width - drawWidth) / 2;
             offsetY = 0;
         }
 
@@ -48,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
             pibbleSucio,
             0,
             0,
-            imgW,
-            imgH,
+            img.naturalWidth,
+            img.naturalHeight,
             offsetX,
             offsetY,
             drawWidth,
@@ -58,9 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Guardar estado inicial
         pixelesIniciales = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = pixelesIniciales.data;
 
+        const data = pixelesIniciales.data;
         pixelesTotalesOpacos = 0;
+
         for (let i = 3; i < data.length; i += 4) {
             if (data[i] > 0) {
                 pixelesTotalesOpacos++;
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.save();
         ctx.globalCompositeOperation = "destination-out";
         ctx.beginPath();
-        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.arc(x, y, 40, 0, Math.PI * 2); // Cambié 20 por 40 para que el cepillo sea más grande
         ctx.fill();
         ctx.restore();
     }
@@ -134,13 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
             barra.style.width = "100%";
             if (porcentajeTexto) porcentajeTexto.textContent = "100%";
             boton.classList.add("activo");
-            mensaje.innerHTML = "¡YAAAAAY!";
+            mensaje.innerHTML = "¡YAAAAAAAAAAY!";
+
+            boton.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
     }
 
     function obtenerPosicion(e) {
-        const contenedor = document.getElementById("contenedor-imagen");
-        const rect = contenedor.getBoundingClientRect();
+        const rect = canvas.getBoundingClientRect();
         if (e.touches) {
             return {
                 x: e.touches[0].clientX - rect.left,
