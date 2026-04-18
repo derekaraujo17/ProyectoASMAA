@@ -32,7 +32,7 @@ def mostrar_pantalla_pibble():
         pass
     
     render_header()
-    st.title("Spibblepy")
+    st.title("SpibblePy")
     #después de que spotify apruebe el acceso, devuelve al usuario a la app poniendo un parámetro "?code="
     #cuando eso ocurre, detectamos la palabra, y si la detectamos, sabemos que el usuario ya se autenticó
     if "code" in st.query_params:
@@ -96,7 +96,7 @@ def mostrar_pantalla_pibble():
         iframeCode = f'''<iframe
         src="data:text/html;base64,{htmlb64}"
         width="100%"
-        height = 700 if st.session_state.get("is_mobile", False) else 750
+        height = 800 if st.session_state.get("is_mobile", False) else 850
         allowtransparency="true"
         style="border:none; background:transparent;"
         sandbox="allow-scripts allow-same-origin allow-top-navigation"

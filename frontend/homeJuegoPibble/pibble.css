@@ -4,13 +4,6 @@
 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* Hover para computadoras */
-@media (hover: hover) and (pointer: fine) {
-    #canvas-limpieza:hover {
-        transform: scale(1.03);
-        filter: brightness(1.1);
-    }
-}
 
 /* Hover en computadoras */
 @media (hover: hover) and (pointer: fine) {
@@ -41,13 +34,20 @@
         filter: brightness(0.9);
     }
 }
+/*Pantallas grandes*/
+@media (min-width: 1024px) {
+    #barra-container {
+        max-width: 300px;
+    }
+
+    #boton-login {
+        font-size: 0.75rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+}
 
 /* Tablets */
 @media (max-width: 768px) {
-    #contenedor-imagen {
-        max-width: 220px;
-    }
-
     #barra-container {
         max-width: 260px;
     }
@@ -125,10 +125,11 @@ canvas {
 /* Imagen del juego */
 #contenedor-imagen {
     position: relative;
-    width: min(70vw, 260px);
-    aspect-ratio: 400 / 625; /* Mantiene la proporción original */
+    width: min(90vw, 260px);
+    aspect-ratio: 260 / 406; /* Mantiene la proporción original */
     margin: 0 auto;
     overflow: hidden;
+    display: block; /* Evita que el contenedor se redimensione al cambiar el tamaño de la ventana */
 }
 
 /* Capas del juego */
@@ -166,7 +167,7 @@ canvas {
 }
 
 #barra-container {
-    width: min(70vw, 300px);
+    width: min(90vw, 520px);
     height: 12px;
     background-color: #1a1a1a;
     border-radius: 10px;
