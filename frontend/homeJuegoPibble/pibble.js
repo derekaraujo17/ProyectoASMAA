@@ -134,12 +134,13 @@ document.addEventListener("DOMContentLoaded", () => {
             barra.style.width = "100%";
             if (porcentajeTexto) porcentajeTexto.textContent = "100%";
             boton.classList.add("activo");
-            mensaje.innerHTML = "¡Pibble quedó reluciente! 🐶✨";
+            mensaje.innerHTML = "¡YAAAAAY!";
         }
     }
 
     function obtenerPosicion(e) {
-        const rect = canvas.getBoundingClientRect();
+        const contenedor = document.getElementById("contenedor-imagen");
+        const rect = contenedor.getBoundingClientRect();
         if (e.touches) {
             return {
                 x: e.touches[0].clientX - rect.left,
