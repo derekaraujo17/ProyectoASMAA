@@ -188,7 +188,18 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("mouseup", detenerDibujo);
     canvas.addEventListener("mouseleave", detenerDibujo);
 
-    canvas.addEventListener("touchstart", iniciarDibujo);
-    canvas.addEventListener("touchmove", dibujar);
-    canvas.addEventListener("touchend", detenerDibujo);
+    canvas.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        iniciarDibujo(e);
+    }, { passive: false });
+
+    canvas.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        dibujar(e);
+    }, { passive: false });
+
+    canvas.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        detenerDibujo();
+    });
 });
