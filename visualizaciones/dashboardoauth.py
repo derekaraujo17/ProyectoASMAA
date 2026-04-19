@@ -28,7 +28,7 @@ def mostrar_dashboardoauth():
         st.warning("Esperando archivos frontend")
         return
     htmlListaCanciones = ""
-    for index, cancion in enumerate(datosTicket):
+    for index, cancion in enumerate(datosTicket["canciones"]):
         renglon=f"""
         <div class="ticket-fila">
         <span class="ticket-num">{(index+1):02d}</span>
@@ -36,14 +36,16 @@ def mostrar_dashboardoauth():
         <span class="ticket-cancion">{cancion["nombre"]}</span>
         <span class="ticket-artista">{cancion["artista"]}</span>
         </div>
-        <span class="ticket-duracion"{cancion["duracion"]}></span>
+        <span class="ticket-duracion">{cancion["duracion"]}</span>
         </div>
         """
         htmlListaCanciones += renglon
     fechaHoy = datetime.now().strftime("%d/%m/%Y %H:%M")
-    
+    nombre = datosTicket["nombre"]
+
     htmlFinal = moldeHtml.replace("{{FECHA_HOY}}",fechaHoy)
-    htmlFinal = htmlFinal.replace("{{CANTIDAD_ITEMS}}", str(len(datosTicket)))
+    htmlFinal = htmlFinal.replace("{{NOMBRE}}", nombre)
+    htmlFinal = htmlFinal.replace("{{CANTIDAD_ITEMS}}", str(len(datosTicket["canciones"])))
     htmlFinal = htmlFinal.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
     htmlFinal = htmlFinal.replace('\n', '')
     st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
