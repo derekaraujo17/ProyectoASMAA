@@ -1,9 +1,6 @@
-/* frontend/animacionOauth/ticket.css */
 
-/* 1. IMPORTAMOS LAS FUENTES (Space Mono para el texto, Libre Barcode para el código de barras) */
 @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended&family=Space+Mono:wght@400;700&display=swap');
 
-/* 2. CONTENEDOR PRINCIPAL REPARADO */
 .contenedor-recibo {
     width: 350px;
     padding: 30px 20px 40px 20px;
@@ -21,16 +18,12 @@
         linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.05) 41%, rgba(255,255,255,0.4) 42%, transparent 43%),
         url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
     
-    /* INCLINACIÓN Y SOMBRA SEGURA (Esto reemplaza los cuadros negros) */
+    /* INCLINACIÓN Y SOMBRA SEGURA  */
     transform: rotate(-2deg);
     box-shadow: 
         0 4px 10px rgba(0,0,0,0.3),  /* Sombra corta y dura */
         0 20px 40px rgba(0,0,0,0.6); /* Sombra difuminada para dar altura */
 }
-
-/* ... (Conserva todo el resto de tu CSS intacto a partir de aquí) ... */
-
-/* --- EL RESTO DE LOS ESTILOS DEL TICKET (Textos y divisiones) --- */
 
 .contenedor-recibo h2 { 
     margin: 0 0 10px 0; 
@@ -121,11 +114,10 @@
 
 /* El código de barras en la base */
 .codigo-barras {
-    font-family: 'Libre Barcode 39 Extended', cursive;
-    font-size: 50px;
+    font-family: 'Libre Barcode 39 Extended', cursive; 
+    font-size: 80px; 
     text-align: center;
-    margin: 0;
-    letter-spacing: -2px;
+    margin: 10px 0 0 0;
     font-weight: 400;
     opacity: 0.8;
 }
