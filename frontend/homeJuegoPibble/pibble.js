@@ -12,13 +12,29 @@ document.addEventListener("DOMContentLoaded", () => {
     let dibujando = false;
     let pixelesIniciales = null;
     let pixelesTotalesOpacos = 0;
+    let ultimaX = null;
+    let ultimaY = null;
+    let lastX = null;
+    let lastY = null;
 
     function ajustarCanvas() {
-        const rect = pibbleSucio.getBoundingClientRect();
+        const rect = pibbleSucio.getBoundingClientRect(); // 👈 FALTABA ESTO
         if (rect.width === 0 || rect.height === 0) return;
 
-        canvas.width = rect.width;
-        canvas.height = rect.height;
+        const dpr = window.devicePixelRatio || 1;
+
+        // Tamaño REAL del canvas (alta resolución)
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        // Tamaño VISUAL (CSS)
+        canvas.style.width = rect.width + "px";
+        canvas.style.height = rect.height + "px";
+
+        // Resetear escala antes de aplicar (evita bugs en resize)
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        ctx.imageSmoothingEnabled = false;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -66,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Ocultar la imagen HTML original
         pibbleSucio.style.visibility = "hidden";
 
         actualizarProgreso();
@@ -84,10 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
     inicializarCanvas();
 
     function limpiar(x, y) {
+        const brushSize = canvas.offsetWidth * 0.07; // ajusta tamaño aquí
+
         ctx.save();
         ctx.globalCompositeOperation = "destination-out";
         ctx.beginPath();
-        ctx.arc(x, y, 40, 0, Math.PI * 2); // Cambié 20 por 40 para que el cepillo sea más grande
+        ctx.arc(x, y, brushSize, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
     }
@@ -158,6 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
         canvas.classList.add("canvas-activo");
 
         const pos = obtenerPosicion(e);
+
+        ultimaX = pos.x;
+        ultimaY = pos.y;
+
         limpiar(pos.x, pos.y);
         actualizarProgreso();
     }
@@ -170,16 +191,31 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         const pos = obtenerPosicion(e);
+
+        if (lastX !== null && lastY !== null) {
+            const dx = pos.x - lastX;
+            const dy = pos.y - lastY;
+            const distancia = Math.sqrt(dx * dx + dy * dy);
+
+            for (let i = 0; i < distancia; i += 5) {
+                const x = lastX + (dx * i) / distancia;
+                const y = lastY + (dy * i) / distancia;
+                limpiar(x, y);
+            }
+        }
+
         limpiar(pos.x, pos.y);
 
-        contador++;
-        if (contador % 10 === 0) {
-            actualizarProgreso();
-        }
+        lastX = pos.x;
+        lastY = pos.y;
+
+    actualizarProgreso()
     }
 
     function detenerDibujo() {
         dibujando = false;
+        lastX = null;
+        lastY = null;
         canvas.classList.remove("canvas-activo");
     }
 

@@ -103,7 +103,7 @@ canvas {
 /* Imagen del juego */
 #contenedor-imagen {
     position: relative;
-    width: 400px;
+    width: clamp(280px, 50vw, 500px);
     max-width: 90vw;
     aspect-ratio: 260 / 406;
     border-radius: 40px;
