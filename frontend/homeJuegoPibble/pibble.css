@@ -69,7 +69,6 @@ body {
     background: transparent;
     display: block;
     height: auto;
-    overflow-y: hidden;
     overflow: hidden;
 }
 html {
@@ -91,7 +90,7 @@ html {
 .titulo-pibble {
     font-family: 'Press Start 2P', cursive;
     color: #ffffff;
-    font-size: clamp(30px, 2.5vw, 17px);
+    font-size: clamp(17px, 2.5vw, 30px);
     line-height: 1.5;
 }
 

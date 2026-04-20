@@ -34,8 +34,8 @@ def mostrar_pantalla_pibble():
     render_header()
     st.markdown("""
                 <h1 style="
-                text-align: allign;
-                font-size: clamp(2.5rem, 6vw, 4.5rem);;
+                text-align: center;
+                font-size: clamp(2.5rem, 6vw, 4.5rem);
                 font-family: 'Press Start 2P', cursive;
                 color: #ffffff;
                 text-shadow: 0 0 10px #8a2be2, 0 0 20px #a855f7;
