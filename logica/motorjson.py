@@ -262,7 +262,9 @@ def procesarDatosJson(archivosSubidos):
     #artistas top 1
     artistasTop1 = top5Artistas.groupby("añoMesReproduccion").head(1).copy()
     artistasTop1["urlFoto"] = artistasTop1["artistName"].apply(lambda artist: obtenerImagenes(artist, track=None, cursor=cursor, memoria_imagenes=memoria_imagenes))
-    
+    artistasTop1["generosCrudos"] = artistasTop1["artistName"].apply(lambda artist: obtenerGeneros(artist, cursor=cursor,memoria_generos=memoria_generos))
+    artistasTop1["vibraArtista"] = artistasTop1["generosCrudos"].apply(lambda generos: calcularVibra([generos]))
+
     cancionesTop1 = cancionesTop1.tail(12)
     artistasTop1 = artistasTop1.tail(12)
     resumenFeeling = resumenFeeling.tail(12)

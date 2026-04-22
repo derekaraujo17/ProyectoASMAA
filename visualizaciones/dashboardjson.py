@@ -70,14 +70,18 @@ def mostrar_dashboardjson():
         cols = st.columns(3) 
 
         for index, mes in enumerate(meses):
-            urlCancion = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["urlPortada"].iloc[0]
-            urlArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["urlFoto"].iloc[0]
-            emojiVibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
-            porcentaje = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["porcentajeReloj"].iloc[0]
-            minutos = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0] 
+            cancionesMes = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]
+            artistasMes = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]
+            feelingMes = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]
+            tiempoMes = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]
+            urlCancion = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin_imagen_cancion.png"
+            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin_imagen_artista.png"
+            emojiVibra = feelingMes["emoji"].iloc[0] if not feelingMes.empty else "🎶"
+            porcentaje = tiempoMes["porcentajeReloj"].iloc[0] if not tiempoMes.empty else 0
+            minutos = tiempoMes["minutosReproducidos"].iloc[0] if not tiempoMes.empty else 0
             porcentaje = int(porcentaje*100)
-            nombreArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
-            generoArtista = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            nombreArtista = artistasMes["artistName"].iloc[0] if not artistasMes.empty else "Desconocido"
+            generoArtista = artistasMes["vibraArtista"].iloc[0] if not artistasMes.empty else "Desconocido"
             imagenPibbleBase64 = obtener_pibble_base64(nombreArtista,generoArtista)
             tarjetaActual = codigoHtml
 
@@ -108,10 +112,11 @@ def mostrar_dashboardjson():
             rutaHtmlDiapositiva1="frontend/animacionJson/slideCancion.html"
             with open(rutaHtmlDiapositiva1, "r", encoding="utf-8") as f:
                 moldeSlide = f.read()
-            urlCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["urlPortada"].iloc[0]
-            nombreCancion1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["trackName"].iloc[0]
-            nombreArtista1 = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
-            escuchas = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]["cantidadEscuchas"].iloc[0]
+            cancionesMes = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]
+            urlCancion1 = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin_imagen_cancion.png"
+            nombreCancion1 = cancionesMes["trackName"].iloc[0] if not cancionesMes.empty else "Desconocido"
+            nombreArtista1 = cancionesMes["artistName"].iloc[0] if not cancionesMes.empty else "Desconocido"
+            escuchas = cancionesMes["cantidadEscuchas"].iloc[0] if not cancionesMes.empty else 0
             slideActual = moldeSlide.replace("{{URL_CANCION}}", urlCancion1)
             slideActual = slideActual.replace("{{NOMBRE_CANCION}}",nombreCancion1)
             slideActual = slideActual.replace("{{NOMBRE_ARTISTA}}",nombreArtista1)
@@ -124,11 +129,12 @@ def mostrar_dashboardjson():
             rutaHtmlDiapositiva2 = "frontend/animacionJson/slideArtista.html"
             with open(rutaHtmlDiapositiva2, "r", encoding="utf-8") as f:
                 moldeSlide = f.read()
-            nombreArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["artistName"].iloc[0]
-            urlArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["urlFoto"].iloc[0]
-            generoArtista = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
+            artistasMes = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]
+            nombreArtista = artistasMes["artistName"].iloc[0] if not artistasMes.empty else "Desconocido"
+            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin_imagen_artista.png"
+            generoArtista = artistasMes["vibraArtista"].iloc[0] if not artistasMes.empty else "🎶"
             imagenPibble = obtener_pibble_base64(nombreArtista, generoArtista)
-            minutosArtista = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            minutosArtista = artistasMes["minutosReproducidos"].iloc[0] if not artistasMes.empty else 0
             slideActual = moldeSlide.replace("{{IMAGEN_PIBBLE}}", imagenPibble)
             slideActual = slideActual.replace("{{URL_ARTISTA}}",urlArtista)
             slideActual = slideActual.replace("{{NOMBRE_ARTISTA}}", nombreArtista)

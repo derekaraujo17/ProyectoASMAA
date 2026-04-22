@@ -1,17 +1,18 @@
 import streamlit as st
 import os
 from spotipy.oauth2 import SpotifyOAuth
+from spotipy.cache_handler import MemoryCacheHandler
 import streamlit.components.v1 as components
 from dotenv import load_dotenv
 from visualizaciones.header import render_header
 import base64
 
-#load_dotenv()
 spotifyOauth=SpotifyOAuth(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
     redirect_uri="http://127.0.0.1:8501",
-    scope="user-top-read user-read-recently-played"
+    scope="user-top-read user-read-recently-played",
+    cache_handler=MemoryCacheHandler()
 )
 
 def obtener_imagen_base64(rutaImagen):
@@ -41,8 +42,6 @@ def mostrar_pantalla_pibble():
                 text-shadow: 0 0 10px #8a2be2, 0 0 20px #a855f7;
                 margin-bottom: 20px;
                 ">SpibblePy</h1>""", unsafe_allow_html=True)
-    #después de que spotify apruebe el acceso, devuelve al usuario a la app poniendo un parámetro "?code="
-    #cuando eso ocurre, detectamos la palabra, y si la detectamos, sabemos que el usuario ya se autenticó
     if "code" in st.query_params:
         #guardamos el código que spotify regresa en la url  lo guardamos en la variable codigoAutorizacion, un "ticket" que nos dará acceso a los datos
         codigoAutorizacion = st.query_params["code"] #query:params es un diccionario de streamlit que lee la url de la barra superior del navegador
@@ -61,9 +60,7 @@ def mostrar_pantalla_pibble():
         st.rerun()
     #la primera vez que entra un usuario
     urlAutorizacion = spotifyOauth.get_authorize_url()
-    #botón temporal
-    #st.markdown(f'<a href="{urlAutorizacion}" target="_top">Iniciar sesión con Spotify</a>', unsafe_allow_html=True)
-    #CONEXIÓN CON EL FRONTEND
+    
     rutaHtml = "frontend/homeJuegoPibble/pibble.html"
     rutaCss = "frontend/homeJuegoPibble/pibble.css"
     rutaJs = "frontend/homeJuegoPibble/pibble.js"
@@ -77,7 +74,6 @@ def mostrar_pantalla_pibble():
         pibbleSuciob64 = obtener_imagen_base64("frontend/assets/pibble_sucio.png")
         pibbleLimpiob64 = obtener_imagen_base64("frontend/assets/pibble_limpio.png")
         estropajob64 = obtener_imagen_base64("frontend/assets/estropajo.png")
-        #variables a reemplazar en html, css, js
         htmlFinal = codigoHtml.replace("urlspotiaqui", urlAutorizacion)
         htmlFinal = htmlFinal.replace("{{PIBBLE_SUCIO}}", pibbleSuciob64)
         htmlFinal = htmlFinal.replace("{{PIBBLE_LIMPIO}}",pibbleLimpiob64)
