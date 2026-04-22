@@ -2,8 +2,6 @@ import streamlit as st
 import os
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import MemoryCacheHandler
-import streamlit.components.v1 as components
-from dotenv import load_dotenv
 from visualizaciones.header import render_header
 import base64
 
@@ -54,7 +52,6 @@ def mostrar_pantalla_pibble():
 
         #limpiamos la url para que el próximo usuario pueda autenticarse sin problema
         st.query_params.clear()
-        #actualizamos pantallas
         st.session_state["autenticado"] = True
         st.session_state["pantalla_actual"] = "seleccion"
         st.rerun()
