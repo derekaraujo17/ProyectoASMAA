@@ -147,8 +147,9 @@ def mostrar_dashboardjson():
             rutaHtmlDiapositiva3 = "frontend/animacionJson/slideFeeling.html"
             with open(rutaHtmlDiapositiva3, "r", encoding="utf-8") as f:
                 moldeSlide = f.read()
-            vibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
-            emoji = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
+            feelingMes = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]
+            vibra = feelingMes["vibraDominante"].iloc[0] if not feelingMes.empty else "Desconocido"
+            emoji = feelingMes["emoji"].iloc[0] if not feelingMes.empty else "🎶"
             slideActual = moldeSlide.replace("{{EMOJI_VIBRA}}", emoji)
             slideActual = slideActual.replace("{{NOMBRE_VIBRA}}", vibra)
             st.markdown(slideActual, unsafe_allow_html=True)
@@ -159,7 +160,8 @@ def mostrar_dashboardjson():
             rutaHtmlDiapositiva4 = "frontend/animacionJson/slideTiempo.html"
             with open(rutaHtmlDiapositiva4, "r", encoding="utf-8") as f:
                 moldeSlide = f.read()
-            minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            tiempoMes = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]
+            minutosTotales = tiempoMes["minutosReproducidos"].iloc[0] if not tiempoMes.empty else 0
             diasTotales = round(minutosTotales/1440,1)
             slideActual = moldeSlide.replace("{{MINUTOS_TOTALES}}",str(minutosTotales))
             slideActual = slideActual.replace("{{DIAS_TOTALES}}",str(diasTotales))
@@ -187,8 +189,9 @@ def mostrar_dashboardjson():
                 minutos = fila["minutosReproducidos"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlArtista}"><p class="nombre-artista">{nombreArtista} con un total de <span class="minutos-artista">{minutos}</span> minutos</p></li>'
                 htmlListaArtistas += elementoLi
-            vibra = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["vibraDominante"].iloc[0]
-            emoji = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]["emoji"].iloc[0]
+            feelingMes = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]
+            vibra = feelingMes["vibraDominante"].iloc[0] if not feelingMes.empty else "Desconocido"
+            emoji = feelingMes["emoji"].iloc[0] if not feelingMes.empty else "🎶"
             frasesCreativas = {
                 # --- CULTURA HIP-HOP Y CALLE ---
                 "🎤 Rap & Hip-Hop": ["Barras, beats y flow sin parar.","Escupiendo rimas todo el mes.","El bombo y la caja marcan el ritmo de tus días.","Leyendas del micrófono en repetición constante."],
@@ -225,8 +228,8 @@ def mostrar_dashboardjson():
             cantidadGeneros = min(3, len(palabrasDeVibra))
             generosElegidos = random.sample(palabrasDeVibra, cantidadGeneros)
             textoGenerosClave = ", ".join(generosElegidos).title()
-
-            minutosTotales = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]["minutosReproducidos"].iloc[0]
+            tiempoMes = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]
+            minutosTotales = tiempoMes["minutosReproducidos"].iloc[0] if not tiempoMes.empty else 0
             tipoDato = random.choice(["rango","equivalencia"])
             if tipoDato == "rango":
                 tituloCurioso = "Tu rango de oyente 🏆"

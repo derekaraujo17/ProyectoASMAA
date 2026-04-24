@@ -2,7 +2,6 @@ import streamlit as st
 import os
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import MemoryCacheHandler
-from visualizaciones.header import render_header
 import base64
 
 spotifyOauth=SpotifyOAuth(
@@ -30,7 +29,6 @@ def mostrar_pantalla_pibble():
     except FileNotFoundError:
         pass
     
-    render_header()
     st.markdown("""
                 <h1 style="
                 text-align: center;
