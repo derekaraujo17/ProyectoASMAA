@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let dibujando = false;
     let pixelesIniciales = null;
     let pixelesTotalesOpacos = 0;
+    let ultimaX = null;
+    let ultimaY = null;
     let lastX = null;
     let lastY = null;
 
@@ -181,6 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarProgreso();
     }
 
+
+    let contador = 0;
+
     function dibujar(e) {
         if (!dibujando) return;
         e.preventDefault();
@@ -232,30 +237,5 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("touchend", (e) => {
         e.preventDefault();
         detenerDibujo();
-    });
-    function enviarAltura() {
-        const body = document.body;
-        const html = document.documentElement;
-        const altura = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    
-        window.parent.postMessage({
-            type: "resize-iframe",
-            height: altura + 50 // Un extra para que no se corte el porcentaje
-        }, "*");
-    }
-
-    window.addEventListener("load", () => {
-        enviarAltura();
-        setTimeout(enviarAltura, 200);
-        setTimeout(enviarAltura, 500);
-    });
-
-
-    const observer = new MutationObserver(() => {
-        enviarAltura();
-    });
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
     });
 });
