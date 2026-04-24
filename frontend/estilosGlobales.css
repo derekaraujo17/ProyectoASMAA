@@ -67,15 +67,33 @@ html, body, p, .custom-header{
 }
 /* Quitar padding lateral */
 [data-testid="stAppViewContainer"] > .main {
-    padding: 0rem 2rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pibble-main-title {
+    font-family: 'Press Start 2P', cursive !important;
+    text-align: center;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    color: #ffffff;
+    text-shadow: 0 0 10px #8a2be2;
+    margin-top: 20px !important;
+    margin-bottom: 5px; /* Pegadito al subtítulo */
+    z-index: 10;
+    display: block;
+    position: relative;
 }
 
 /* Ajustar contenido */
 .block-container {
-    padding-top: 6rem !important;
-    padding-bottom: 1rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    max-width: 1000px;
+    width: 100%;
+    padding-top: 2rem !important; /* Reducimos el padding superior */
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    margin: 0 auto;
 }
 /* Botones */
 [data-testid="stButton"] button {

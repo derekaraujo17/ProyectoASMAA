@@ -63,13 +63,36 @@
     }
 }
 
+.titulo-pibble {
+    font-family: 'Press Start 2P', cursive !important;
+    color: #ffffff;
+    /* Usamos rem para que escale igual que el título de afuera */
+    font-size: 0.8rem; 
+    text-align: center;
+    margin: 10px auto;
+    width: 100%;
+    line-height: 1.4;
+    display: block;
+}
+
+#mensaje {
+    margin-top: 15px;
+    /* Aseguramos que el mensaje del porcentaje siempre tenga espacio */
+    min-height: 1.5em; 
+}
+
+#game-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 body {
     margin: 0;
     padding: 0;
     background: transparent;
     display: block;
     height: auto;
-    overflow: hidden;
 }
 html {
     background: transparent;
@@ -81,9 +104,9 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px; /* Más espacio arriba y abajo */
-    min-height: 100vh;   /* Asegura que ocupe al menos toda la pantalla */
-    justify-content: flex-start; /* Empieza desde arriba, no desde el centro */
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
 }
 
 /* Texto */
@@ -102,13 +125,13 @@ canvas {
 /* Imagen del juego */
 #contenedor-imagen {
     position: relative;
-    width: clamp(280px, 50vw, 500px);
-    max-width: 90vw;
-    aspect-ratio: 260 / 406;
-    border-radius: 40px;
+    width: 60vw;
+    max-width: 450px; /* Tamaño máximo razonable para la pancita */
+    min-width: 250px;
+
+    aspect-ratio: 260 / 406; /* Ajusta según la forma de tu imagen */
     margin: 0 auto;
-    overflow: hidden;
-    }
+}
 
 
 /* Capas del juego */

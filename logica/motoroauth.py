@@ -1,33 +1,27 @@
-import spotipy
-from datetime import datetime
+from dotenv import load_dotenv
+import streamlit as st
 
-def ticket(token):
-    try:
-        sp = spotipy.Spotify(auth=token)
-        historialCrudo = sp.current_user_recently_played(limit=10)
-        perfil = sp.current_user()
-        nombreCliente = perfil.get("display_name", "Usuario misterioso")
-        cancionesTicket = []
-        for item in historialCrudo.get("items",[]):
-            track = item.get("track",{})
-            duracionMs = track.get("duration_ms", 0) // 1000
-            minutos, segundos = divmod(duracionMs, 60)
-            fechaObj = datetime.strptime(item.get("played_at"), "%Y-%m-%dT%H:%M:%S.%fZ")
-            lista_artistas = track.get("artists", [])
-            if isinstance(lista_artistas, list) and len(lista_artistas) > 0:
-                artista = lista_artistas[0].get("name", "Artista Desconocido")
-            else:
-                artista = "Artista Desconocido"
-            cancionesTicket.append({
-                "nombre":track.get("name", "Cancion Desconocida"),
-                "artista":artista,
-                "duracion":f"{minutos}:{segundos:02d}",
-                "fecha":fechaObj.strftime("%d/%m/%Y - %I:%M %p")
-            })
-        return {
-            "canciones": cancionesTicket,
-            "nombre": nombreCliente
-        }
-    except Exception as e:
-        print(f"Error en motor Oauth: {e}")
-        return None
+load_dotenv()
+st.set_page_config(page_title="Spibblepy",layout="wide")
+from visualizaciones import home, seleccion, dashboardjson, dashboardoauth, pantallaCarga
+
+# inicialización de la memoria (st.session_state)
+if "autenticado" not in st.session_state:
+    st.session_state["autenticado"] = False
+
+if "pantalla_actual" not in st.session_state:
+    st.session_state["pantalla_actual"] = "home"
+
+if st.session_state["pantalla_actual"] == "home":
+    home.mostrar_pantalla_pibble()
+
+elif st.session_state["pantalla_actual"] == "seleccion":
+    seleccion.mostrar_pantalla_botones()
+
+elif st.session_state["pantalla_actual"] == "pantallaCarga":
+    pantallaCarga.mostrar_pantalla_carga()
+
+elif st.session_state["pantalla_actual"] == "dashboardjson":
+    dashboardjson.mostrar_dashboardjson()
+elif st.session_state["pantalla_actual"] == "dashboardoauth":
+    dashboardoauth.mostrar_dashboardoauth()

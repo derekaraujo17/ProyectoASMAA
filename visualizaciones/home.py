@@ -30,16 +30,8 @@ def mostrar_pantalla_pibble():
     except FileNotFoundError:
         pass
     
-    render_header()
-    st.markdown("""
-                <h1 style="
-                text-align: center;
-                font-size: clamp(2.5rem, 6vw, 4.5rem);
-                font-family: 'Press Start 2P', cursive;
-                color: #ffffff;
-                text-shadow: 0 0 10px #8a2be2, 0 0 20px #a855f7;
-                margin-bottom: 20px;
-                ">SpibblePy</h1>""", unsafe_allow_html=True)
+    #render_header()
+    st.markdown('<h1 class="pibble-main-title">SpibblePy</h1>', unsafe_allow_html=True)
     if "code" in st.query_params:
         #guardamos el código que spotify regresa en la url  lo guardamos en la variable codigoAutorizacion, un "ticket" que nos dará acceso a los datos
         codigoAutorizacion = st.query_params["code"] #query:params es un diccionario de streamlit que lee la url de la barra superior del navegador
@@ -83,7 +75,6 @@ def mostrar_pantalla_pibble():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="color-scheme" content="dark light">
-        <style>html, body{{background-color:transparent !important; background:transparent !important; color-scheme:dark; margin:0; padding:0;}}</style>
         <style>{cssGlobal}</style>
         <style>{codigoCss}</style>
         </head>
@@ -94,14 +85,29 @@ def mostrar_pantalla_pibble():
         </html>
         """
         htmlb64 = base64.b64encode(paqueteCompleto.encode('utf-8')).decode('utf-8')
-        iframeCode = f'''<iframe
-        src="data:text/html;base64,{htmlb64}"
-        width="100%"
-        height="1400"
-        style="border:none; background:transparent; overflow:hidden;"
-        scrolling="no"
-        sandbox="allow-scripts allow-same-origin allow-top-navigation"
-        ></iframe>'''
+        iframeCode = f"""
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <iframe
+                id="pibble-frame"
+                src="data:text/html;base64,{htmlb64}"
+                width="100%"
+                style="border:none; background:transparent; height: 900px; overflow: visible;"
+                scrolling="no"
+                sandbox="allow-scripts allow-same-origin allow-top-navigation allow-forms"
+            ></iframe>
+        </div>
+
+        <script>
+        window.addEventListener("message", function(event) {{
+            if (event.data.type === "resize-iframe") {{
+                const iframe = document.getElementById("pibble-frame");
+                if (iframe) {{
+                    iframe.style.height = event.data.height + "px";
+                }}
+            }}
+        }});
+        </script>
+        """
         st.markdown(iframeCode, unsafe_allow_html=True)    
     except:
         st.warning(f"Esperando el archivo frontend")
