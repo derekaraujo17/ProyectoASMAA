@@ -12,7 +12,9 @@ def ticket(token):
             track = item.get("track",{})
             duracionMs = track.get("duration_ms", 0) // 1000
             minutos, segundos = divmod(duracionMs, 60)
-            fechaObj = datetime.strptime(item.get("played_at"), "%Y-%m-%dT%H:%M:%S.%fZ")
+            fechaCruda = item.get("played_at", "2000-01-01T00:00:00Z")
+            fechaLimpia = fechaCruda.replace("Z", "").split(".")[0]
+            fechaObj = datetime.strptime(fechaLimpia, "%Y-%m-%dT%H:%M:%S")
             lista_artistas = track.get("artists", [])
             if isinstance(lista_artistas, list) and len(lista_artistas) > 0:
                 artista = lista_artistas[0].get("name", "Artista Desconocido")
