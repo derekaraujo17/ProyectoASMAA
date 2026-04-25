@@ -80,16 +80,25 @@ def mostrar_pantalla_pibble():
         <!DOCTYPE html>
         <html lang="es">
         <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="color-scheme" content="dark light">
-        <style>html, body{{background-color:transparent !important; background:transparent !important; color-scheme:dark; margin:0; padding:0;}}</style>
-        <style>{cssGlobal}</style>
-        <style>{codigoCss}</style>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="color-scheme" content="dark light">
+            <style>
+                html, body {{
+                    background-color:transparent !important;
+                    background:transparent !important;
+                    color-scheme:dark;
+                    margin:0;
+                    padding:0;
+                    touch-action: none;
+                }}
+            </style>
+            <style>{cssGlobal}</style>
+            <style>{codigoCss}</style>
         </head>
         <body>
-        {htmlFinal}
-        <script>{codigoJs}</script>
+            {htmlFinal}
+            <script>{codigoJs}</script>
         </body>
         </html>
         """
@@ -97,7 +106,7 @@ def mostrar_pantalla_pibble():
         iframeCode = f'''<iframe
         src="data:text/html;base64,{htmlb64}"
         width="100%"
-        height="1400"
+        height="800"
         style="border:none; background:transparent; overflow:hidden;"
         scrolling="no"
         sandbox="allow-scripts allow-same-origin allow-top-navigation"
