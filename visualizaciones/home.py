@@ -31,12 +31,14 @@ def mostrar_pantalla_pibble():
     
     st.markdown("""
                 <h1 style="
+                margin-top: -80px;
                 text-align: center;
-                font-size: clamp(2.5rem, 6vw, 4.5rem);
+                font-size: clamp(2.0rem, 6vw, 3.0rem);
                 font-family: 'Press Start 2P', cursive;
                 color: #ffffff;
                 text-shadow: 0 0 10px #8a2be2, 0 0 20px #a855f7;
                 margin-bottom: 20px;
+                animation: bounce 3s infinite;
                 ">SpibblePy</h1>""", unsafe_allow_html=True)
     if "code" in st.query_params:
         #guardamos el código que spotify regresa en la url  lo guardamos en la variable codigoAutorizacion, un "ticket" que nos dará acceso a los datos

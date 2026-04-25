@@ -12,13 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let dibujando = false;
     let pixelesIniciales = null;
     let pixelesTotalesOpacos = 0;
-    let ultimaX = null;
-    let ultimaY = null;
     let lastX = null;
     let lastY = null;
 
     function ajustarCanvas() {
-        const rect = pibbleSucio.getBoundingClientRect(); // 👈 FALTABA ESTO
+        const rect = pibbleSucio.getBoundingClientRect();
         if (rect.width === 0 || rect.height === 0) return;
 
         const dpr = window.devicePixelRatio || 1;
@@ -151,8 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (porcentajeTexto) porcentajeTexto.textContent = "100%";
             boton.classList.add("activo");
             mensaje.innerHTML = "¡YAAAAAAAAAAY!";
-
-            boton.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
     }
 
@@ -182,9 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
         limpiar(pos.x, pos.y);
         actualizarProgreso();
     }
-
-
-    let contador = 0;
 
     function dibujar(e) {
         if (!dibujando) return;
@@ -237,5 +230,30 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.addEventListener("touchend", (e) => {
         e.preventDefault();
         detenerDibujo();
+    });
+    function enviarAltura() {
+        const body = document.body;
+        const html = document.documentElement;
+        const altura = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    
+        window.parent.postMessage({
+            type: "resize-iframe",
+            height: altura + 50 // Un extra para que no se corte el porcentaje
+        }, "*");
+    }
+
+    window.addEventListener("load", () => {
+        enviarAltura();
+        setTimeout(enviarAltura, 200);
+        setTimeout(enviarAltura, 500);
+    });
+
+
+    const observer = new MutationObserver(() => {
+        enviarAltura();
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
     });
 });
