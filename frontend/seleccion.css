@@ -1,21 +1,38 @@
-/* DISEÑO ESPECÍFICO PARA LA PANTALLA DE SELECCIÓN.
-- Darle estilo al cuadro de subir archivos (st.file_uploader).
-- Personalizar los botones de "Analizar mis archivos" y "OAuth".
-- etc.
-aquí dependeremos ahora sí de los archivos nativos de streamlit (revisar la pagina con f12), por lo que tienen que hacer las implementaciones
-con el data-testid
-Para cambiar el cuadro de subir archivos, su CSS debe ser: [data-testid="stFileUploader"] { ... }
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-Para cambiar los botones de Streamlit, su CSS debe ser: [data-testid="stBaseButton-secondary"] { ... }
+.pibble-matrix-container {
+    background-image: var(--fondo-pibble);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    height: 70vh; /* Ajusta según el alto que desees */
+    display: flex;
+    align-items: flex-start;
+    padding-top: 50px;
+}
 
-Para cambiar los textos que agregué con st.markdown, pueden usar la clase que les puse: .titulo-columna { ... }
-esto es un poco de lo que vi quepodrían hacer, pero de igual forma ustedes investíguenlo
+.mano-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
-para este caso van a tener que usar operadores estructurales,así que igual que los operadores de id, de clase, etc.
-tendrán que aprender a usar estos para estilizar cada botón por separado
-este puede ser un ejemplo, pero adelante con ustedes
-div[data-testid="column"]:nth-of-type(1) button {
-    background-color: #1DB954; Verde Spotify 
-div[data-testid="column"]:nth-of-type(2) button {
-    background-color: #191414; Negro Spotify
-*/
+/* Ajusta los margenes para que coincidan con la posición de las palmas en la imagen */
+.mano-roja {
+    margin-top: 250px; 
+}
+
+.mano-azul {
+    margin-top: 250px;
+}
+
+/* Estilo Matrix para botones */
+[data-testid="stBaseButton-secondary"] {
+    border-radius: 50px !important; /* Forma de pastilla */
+    padding: 10px 25px !important;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
