@@ -1,38 +1,94 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-.pibble-matrix-container {
+* {
+    font-family: 'Press Start 2P', cursive !important;
+}
+
+[data-testid="stHorizontalBlock"] {
     background-image: var(--fondo-pibble);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center bottom;
-    height: 70vh; /* Ajusta según el alto que desees */
-    display: flex;
-    align-items: flex-start;
-    padding-top: 50px;
+    min-height: 75vh; 
+    align-items: flex-end;
+    padding-bottom: 20px;
 }
 
-.mano-contenedor {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.titulo-seleccion {
+    text-align: center; 
+    color: white; 
+    font-size: 20px; 
+    margin-bottom: 20px;
 }
 
-/* Ajusta los margenes para que coincidan con la posición de las palmas en la imagen */
-.mano-roja {
-    margin-top: 250px; 
+.lore-matrix {
+    font-size: 10px !important;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,1);
+}
+.texto-rojo { color: #ff4b4b; text-align: right; }
+.texto-azul { color: #4bb4ff; text-align: left; }
+
+div[data-testid="column"]:nth-child(1), div[data-testid="stVerticalBlock"]:nth-child(1) {
+    padding-left: 5% !important;
+}
+div[data-testid="column"]:nth-child(3), div[data-testid="stVerticalBlock"]:nth-child(3) {
+    padding-right: 5% !important; 
 }
 
-.mano-azul {
-    margin-top: 250px;
+[data-testid="stFileUploadDropzone"],
+[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploader"] > section {
+    background-color: rgba(20, 0, 0, 0.7) !important; 
+    border: 2px dashed #ff1111 !important; 
+    border-radius: 15px !important;
+    padding: 10px !important; 
+    min-height: 80px !important; 
+    transition: 0.3s;
 }
 
-/* Estilo Matrix para botones */
-[data-testid="stBaseButton-secondary"] {
-    border-radius: 50px !important; /* Forma de pastilla */
-    padding: 10px 25px !important;
+[data-testid="stFileUploadDropzone"]:hover,
+[data-testid="stFileUploaderDropzone"]:hover,
+[data-testid="stFileUploader"] > section:hover {
+    background-color: rgba(50, 0, 0, 0.9) !important;
+    border: 2px solid #ff4b4b !important;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important;
+}
+
+[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
+    background: radial-gradient(circle, #ff1111 0%, #770000 100%) !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 50px !important;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6) !important;
+    color: white !important;
+    padding: 5px 15px !important; 
+    font-size: 10px !important; 
+}
+[data-testid="stHorizontalBlock"] > div:nth-child(1) button:hover {
+    background: #ff0000 !important;
+    transform: scale(1.05) !important;
+}
+
+[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
+    background: radial-gradient(circle, #0066ff 0%, #000066 100%) !important;
+    background-image: radial-gradient(circle, #0066ff 0%, #000066 100%) !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 50px !important;
+    box-shadow: 0 0 20px rgba(0, 100, 255, 0.6) !important;
+    color: white !important;
     text-transform: uppercase;
-    font-weight: bold;
+    padding: 5px 15px !important; 
+    font-size: 10px !important; 
 }
 
+[data-testid="stHorizontalBlock"] > div:nth-child(3) button:hover {
+    background: #0044ff !important;
+    box-shadow: 0 0 35px rgba(0, 100, 255, 0.9) !important;
+    transform: scale(1.05) !important;
+}
+
+[data-testid="stHorizontalBlock"] > div:nth-child(1) button p,
+[data-testid="stHorizontalBlock"] > div:nth-child(3) button p {
+    color: white !important;
+}
