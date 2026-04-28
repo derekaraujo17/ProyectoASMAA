@@ -24,6 +24,13 @@ def mostrar_pantalla_botones():
     <style>
     :root {{
         --fondo-pibble: url('{pibbleFondob64}');
+        
+        /* estado dinámico */
+    --mouse-x: 50;
+    --color-r: 168;
+    --color-g: 85;
+    --color-b: 247;
+    --offset-x: 0px;
     }}
     </style>
     """
@@ -61,3 +68,34 @@ def mostrar_pantalla_botones():
         if st.button("DATOS ACTUALES", key="btn_oauth", disabled=len(jsonValidos) > 0, use_container_width=True):
             st.session_state.update({"motor": "motoroauth", "pantalla_actual": "pantallaCarga"})
             st.rerun()
+    
+    st.markdown("""
+    <script>
+    if (!window.tituloEffectLoaded) {
+        document.addEventListener("mousemove", (e) => {
+            const width = window.innerWidth;
+            const x = e.clientX;
+
+            const root = document.documentElement;
+
+            // porcentaje de posición
+            const percent = x / width;
+
+            // interpolación rojo ↔ azul
+            const r = Math.floor(255 * (1 - percent));
+            const b = Math.floor(255 * percent);
+
+            root.style.setProperty('--mouse-x', (percent - 0.5) * 100);
+            root.style.setProperty('--color-r', r);
+            root.style.setProperty('--color-g', 80);
+            root.style.setProperty('--color-b', b);
+
+            // glitch suave
+            const offset = Math.sin(x * 0.01) * 3;
+            root.style.setProperty('--offset-x', offset + "px");
+        });
+        
+        window.tituloEffectLoaded = true;
+        }
+    </script>
+    """, unsafe_allow_html=True)

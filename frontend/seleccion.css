@@ -15,10 +15,10 @@
 }
 
 .titulo-seleccion {
-    text-align: center; 
-    color: white; 
-    font-size: 20px; 
-    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+    animation: neonGlow 2s ease-in-out infinite alternate;
 }
 
 .lore-matrix {
@@ -95,4 +95,19 @@ div[data-testid="column"]:nth-child(3), div[data-testid="stVerticalBlock"]:nth-c
 [data-testid="stHorizontalBlock"] > div:nth-child(1) button p,
 [data-testid="stHorizontalBlock"] > div:nth-child(3) button p {
     color: white !important;
+}
+
+@keyframes neonGlow {
+    from {
+        text-shadow:
+            0 0 5px #8a2be2,
+            0 0 10px #a855f7,
+            0 0 20px #a855f7;
+    }
+    to {
+        text-shadow:
+            0 0 10px #c084fc,
+            0 0 20px #c084fc,
+            0 0 30px #c084fc;
+    }
 }
