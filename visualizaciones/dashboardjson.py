@@ -8,24 +8,27 @@ import random
 from logica.motorjson import diccionarioVibras
 from datetime import datetime, timedelta
 
-def obtener_pibble_base64(nombreArtista, generoArtista):
-    nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombreArtista) if unicodedata.category(c) != 'Mn'))
+def limpiar_nombre_pibble(nombrePibble):
+    nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombrePibble) if unicodedata.category(c) != 'Mn'))
     nombreLimpio = re.sub(r'[^a-z0-9]', '_', nombreLimpio.lower())
     nombreLimpio = re.sub(r'_+', '_', nombreLimpio).strip('_')
-    generoLimpio = ''.join((c for c in unicodedata.normalize('NFD', generoArtista) if unicodedata.category(c) != 'Mn'))
-    generoLimpio = re.sub(r'[^a-z0-9]', '_', generoLimpio.lower())
-    generoLimpio = re.sub(r'_+', '_', generoLimpio).strip('_')
-    
-    rutaIdeal = f"frontend/assets/{nombreLimpio}.png"
-    rutaGenero = f"frontend/assets/{generoLimpio}.png"
+    return nombreLimpio
 
-    rutaFinal = rutaIdeal if os.path.exists(rutaIdeal) else rutaGenero
+def obtener_pibble_base64(nombreArtista, generoArtista):
+    nombreArtista = limpiar_nombre_pibble(nombreArtista) 
+    generoArtista = limpiar_nombre_pibble(generoArtista)
+    
+    rutaIdeal = f"frontend/assets/{nombreArtista}.png"
+    rutaGenero = f"frontend/assets/{generoArtista}.png"
+    rutaGenerico = f"frontend/assets/pibble_generico.png"
+
+    rutaFinal = rutaIdeal if os.path.exists(rutaIdeal) else rutaGenero if os.path.exists(rutaGenero) else rutaGenerico 
     try:
         with open(rutaFinal, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
         return f"data:image/png;base64,{encoded_string}"
     except FileNotFoundError:
-        return ""
+        return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 
 
 def mostrar_dashboardjson():
