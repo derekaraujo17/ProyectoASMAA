@@ -106,8 +106,7 @@ def mostrar_pantalla_pibble():
         iframeCode = f'''<iframe
         src="data:text/html;base64,{htmlb64}"
         width="100%"
-        height="800"
-        style="border:none; background:transparent; overflow:hidden;"
+        style="height: 800px; min-height: 700px; border:none; background:transparent; overflow:hidden;"
         scrolling="no"
         sandbox="allow-scripts allow-same-origin allow-top-navigation"
         ></iframe>'''

@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const observer = new MutationObserver(() => {
         enviarAltura();
     });
-    observer.observe(document.body, {
+    observer.observe(document.getElementById("contenedor-pibble"), {
         childList: true,
         subtree: true,
     });
