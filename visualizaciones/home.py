@@ -3,6 +3,8 @@ import os
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import MemoryCacheHandler
 import base64
+from visualizaciones.helpers import leer_externos, obtener_imagen_base64
+
 
 spotifyOauth=SpotifyOAuth(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
@@ -12,20 +14,11 @@ spotifyOauth=SpotifyOAuth(
     cache_handler=MemoryCacheHandler()
 )
 
-def obtener_imagen_base64(rutaImagen):
-    try:
-        with open(rutaImagen, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode()
-        return f"data:image/png;base64,{encoded_string}"
-    except FileNotFoundError:
-        return ""
-
 def mostrar_pantalla_pibble():
     rutaCssGlobal = "frontend/estilosGlobales.css"
     try: 
-        with open(rutaCssGlobal, "r", encoding="utf-8") as f:
-            cssGlobal = f.read()
-            st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
+        cssGlobal = leer_externos(rutaCssGlobal)
+        st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
         pass
     
@@ -62,12 +55,9 @@ def mostrar_pantalla_pibble():
     rutaCss = "frontend/homeJuegoPibble/pibble.css"
     rutaJs = "frontend/homeJuegoPibble/pibble.js"
     try:
-        with open(rutaHtml, "r", encoding="utf-8") as f:
-            codigoHtml = f.read()
-        with open(rutaCss, "r", encoding="utf-8") as f:
-            codigoCss = f.read()
-        with open(rutaJs, "r", encoding="utf-8") as f:
-            codigoJs = f.read()
+        codigoHtml = leer_externos(rutaHtml)
+        codigoCss = leer_externos(rutaCss)
+        codigoJs = leer_externos(rutaJs)
         pibbleSuciob64 = obtener_imagen_base64("frontend/assets/pibble_sucio.png")
         pibbleLimpiob64 = obtener_imagen_base64("frontend/assets/pibble_limpio.png")
         estropajob64 = obtener_imagen_base64("frontend/assets/estropajo.png")

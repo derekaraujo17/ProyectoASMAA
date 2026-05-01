@@ -1,14 +1,6 @@
 import streamlit as st
 from visualizaciones.header import render_header
-import base64
-
-def obtener_imagen_base64(rutaImagen):
-    try:
-        with open(rutaImagen, "rb") as imageFile:
-            encoded_string = base64.b64encode(imageFile.read()).decode()
-        return f"data:image/png;base64,{encoded_string}"
-    except FileNotFoundError:
-        return ""
+from visualizaciones.helpers import leer_externos, obtener_imagen_base64
 
 def cargarArchivos(archivosSubidos):
     archivosValidos = []
@@ -24,23 +16,16 @@ def mostrar_pantalla_botones():
     <style>
     :root {{
         --fondo-pibble: url('{pibbleFondob64}');
-        
-        /* estado dinámico */
-    --mouse-x: 50;
-    --color-r: 168;
-    --color-g: 85;
-    --color-b: 247;
-    --offset-x: 0px;
     }}
     </style>
     """
     st.markdown(css_variable_fondo, unsafe_allow_html=True)
 
     try:
-        with open("frontend/estilosGlobales.css", "r", encoding="utf-8") as f: 
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-        with open("frontend/seleccion.css", "r", encoding="utf-8") as f: 
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        cssGlobal = leer_externos("frontend/estilosGlobales.css")
+        cssSeleccion = leer_externos("frontend/seleccion.css")
+        st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
+        st.markdown(f"<style>{cssSeleccion}</style>", unsafe_allow_html=True)
     except FileNotFoundError: 
         pass
 
@@ -68,34 +53,3 @@ def mostrar_pantalla_botones():
         if st.button("DATOS ACTUALES", key="btn_oauth", disabled=len(jsonValidos) > 0, use_container_width=True):
             st.session_state.update({"motor": "motoroauth", "pantalla_actual": "pantallaCarga"})
             st.rerun()
-    
-    st.markdown("""
-    <script>
-    if (!window.tituloEffectLoaded) {
-        document.addEventListener("mousemove", (e) => {
-            const width = window.innerWidth;
-            const x = e.clientX;
-
-            const root = document.documentElement;
-
-            // porcentaje de posición
-            const percent = x / width;
-
-            // interpolación rojo ↔ azul
-            const r = Math.floor(255 * (1 - percent));
-            const b = Math.floor(255 * percent);
-
-            root.style.setProperty('--mouse-x', (percent - 0.5) * 100);
-            root.style.setProperty('--color-r', r);
-            root.style.setProperty('--color-g', 80);
-            root.style.setProperty('--color-b', b);
-
-            // glitch suave
-            const offset = Math.sin(x * 0.01) * 3;
-            root.style.setProperty('--offset-x', offset + "px");
-        });
-        
-        window.tituloEffectLoaded = true;
-        }
-    </script>
-    """, unsafe_allow_html=True)

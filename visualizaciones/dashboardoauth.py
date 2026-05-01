@@ -1,7 +1,7 @@
 import streamlit as st
-import base64
 from datetime import datetime
 from visualizaciones.header import render_header
+from visualizaciones.helpers import leer_externos
 
 def mostrar_dashboardoauth():
     render_header()
@@ -11,19 +11,12 @@ def mostrar_dashboardoauth():
         st.error("No hay datos de spotify. Volviendo a la pantalla anterior...")
         st.session_state["pantalla_actual"] = "seleccion"
         st.rerun()
-    rutaCssGlobal = "frontend/estilosGlobales.css"
-    rutaHtmlTicket = "frontend/animacionOauth/ticket.html"
-    rutaCssTicket = "frontend/animacionOauth/ticket.css"
     try:
-        with open(rutaCssGlobal, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>",unsafe_allow_html=True)
-    except FileNotFoundError:
-        pass
-    try:
-        with open(rutaHtmlTicket, "r", encoding="utf-8") as f:
-            moldeHtml = f.read()
-        with open(rutaCssTicket, "r", encoding="utf-8") as f:
-            codigoCss = f.read()
+        cssGlobal = leer_externos("frontend/estilosGlobales.css")
+        moldeHtml = leer_externos("frontend/animacionOauth/ticket.html")
+        codigoCss = leer_externos("frontend/animacionOauth/ticket.css")
+        st.markdown(f"<style>{cssGlobal}</style>",unsafe_allow_html=True)
+        st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
     except FileNotFoundError:
         st.warning("Esperando archivos frontend")
         return

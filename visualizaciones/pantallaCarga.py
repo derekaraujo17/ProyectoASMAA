@@ -1,9 +1,8 @@
 import streamlit as st
 import time
 import random
-import base64
-import os
 from visualizaciones.header import render_header
+from visualizaciones.helpers import leer_externos, obtener_imagen_base64
 
 @st.cache_data(show_spinner=False)
 def ejecutar_motor_json(archivos):
@@ -15,23 +14,6 @@ def ejecutar_motor_oauth(token):
     from logica.motoroauth import ticket
     return ticket(token)
 
-def obtener_gif_base64(numero):
-    rutasGifs = {
-        1: "frontend/animacionCarga/links/pibble_edn.gif",
-        2: "frontend/animacionCarga/links/starkirk.gif",
-        3: "frontend/animacionCarga/links/tuff.gif",
-        4: "frontend/animacionCarga/links/pibble_edn.gif",
-        5: "frontend/animacionCarga/links/starkirk.gif",
-        6: "frontend/animacionCarga/links/pibble_edn.gif",
-        7: "frontend/animacionCarga/links/tuff.gif"
-    }
-    ruta = rutasGifs.get(numero, rutasGifs[1])
-    try:
-        with open(ruta, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode()
-        return f"data:image/gif;base64, {encoded_string}"
-    except FileNotFoundError:
-        return ""
 def mostrar_pantalla_carga():
     if "analisis_listo" not in st.session_state:
         st.session_state["analisis_listo"] = False
@@ -42,33 +24,33 @@ def mostrar_pantalla_carga():
     if "tiempo_inicio_carga" not in st.session_state:
         st.session_state["tiempo_inicio_carga"] = None
 
-    numero = st.session_state["animacion_elegida"]
-    rutaCssGlobal = "frontend/estilosGlobales.css"
-    
+    numero = st.session_state["animacion_elegida"]    
     try:
-        with open(rutaCssGlobal, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        cssGlobal = leer_externos("frontend/estilosGlobales.css")
+        st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
         pass
     if not st.session_state["analisis_listo"]:
         
         contenedorAnimacion = st.empty()
-        rutaCssCarga = "frontend/animacionCarga/carga.css"
-        rutaHtmlCarga = "frontend/animacionCarga/carga.html"
-        rutaJsCarga = "frontend/animacionCarga/carga.js"
+        rutasGifs = {
+            1: "frontend/animacionCarga/links/pibble_edn.gif",
+            2: "frontend/animacionCarga/links/starkirk.gif",
+            3: "frontend/animacionCarga/links/tuff.gif",
+            4: "frontend/animacionCarga/links/pibble_edn.gif",
+            5: "frontend/animacionCarga/links/starkirk.gif",
+            6: "frontend/animacionCarga/links/pibble_edn.gif",
+            7: "frontend/animacionCarga/links/tuff.gif"
+        }
+        rutaGifElegida = rutasGifs.get(numero, rutasGifs[1])
         
         try: 
-            with open(rutaCssCarga, "r", encoding="utf-8") as f:
-                codigoCss = f.read()
-            with open(rutaHtmlCarga, "r", encoding="utf-8") as f:
-                htmlCrudo = f.read()
-            with open(rutaJsCarga, "r", encoding="utf-8") as f:
-                codigoJs = f.read()
-                
+            codigoCss = leer_externos("frontend/animacionCarga/carga.css")
+            htmlCrudo = leer_externos("frontend/animacionCarga/carga.html")
+            gif_base64 = obtener_imagen_base64(rutaGifElegida)
             htmlListo = htmlCrudo.replace("NUMERO", str(numero))
-            gif_base64 = obtener_gif_base64(numero)
-            htmlListo = htmlCrudo.replace("{{GIF_BASE64}}", gif_base64)
-            paqueteCompleto = f"<style>{codigoCss}</style>\n{htmlListo}\n<script>{codigoJs}</script>"
+            htmlListo = htmlListo.replace("{{GIF_BASE64}}", gif_base64)
+            paqueteCompleto = f"<style>{codigoCss}</style>{htmlListo}"
             
             contenedorAnimacion.markdown(paqueteCompleto, unsafe_allow_html=True)
             time.sleep(0.2)
