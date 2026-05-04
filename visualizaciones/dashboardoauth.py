@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 from visualizaciones.header import render_header
 from visualizaciones.helpers import leer_externos
+from visualizaciones.helpers import obtener_imagen_base64
 
 def mostrar_dashboardoauth():
     render_header()
@@ -41,10 +42,35 @@ def mostrar_dashboardoauth():
     htmlFinal = htmlFinal.replace("{{CANTIDAD_ITEMS}}", str(len(datosTicket["canciones"])))
     htmlFinal = htmlFinal.replace("{{LISTA_CANCIONES}}", htmlListaCanciones)
     htmlFinal = htmlFinal.replace('\n', '')
-    st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
-    st.markdown(htmlFinal, unsafe_allow_html=True)
     
-    st.markdown("<hr style='border-color: rgba(255,255,255,0.1); margin:40px 0;'>",unsafe_allow_html=True)
+    pibbleCashier = obtener_imagen_base64("frontend/assets/pibble_cashier.png")
+    
+    st.markdown(f"""
+    <style>
+    .contenedor-ticket {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }}
+
+    .pibble-cashier {{
+    width: clamp(150px, 18vw, 250px);
+    }}
+
+    .contenedor-recibo {{
+        margin: 0 !important;
+    }}
+    </style>
+
+    <div class="contenedor-ticket">
+        <img src="{pibbleCashier}" class="pibble-cashier">
+        {htmlFinal}
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<hr style='border-color':rgba(255,255,255,0.1); margin:40px 0;'>", unsafe_allow_html=True)
+    
     if st.button("Volver a elegir análisis",use_container_width=True):
         st.session_state["pantalla_actual"] = "seleccion"
         del st.session_state["resultados_oauth"]
