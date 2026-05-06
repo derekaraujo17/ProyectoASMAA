@@ -31,7 +31,7 @@ def mostrar_pantalla_botones():
 
     st.markdown("<h1 class='titulo-seleccion'>¿QUÉ REALIDAD ELIGES?</h1>", unsafe_allow_html=True)
 
-    col_izq, col_centro, col_der = st.columns([1.2, 1.5, 1.2])
+    col_izq, col_centro, col_der = st.columns([1.2, 0.6, 1.2])
 
     with col_izq:
         st.markdown('<div class="lore-matrix texto-rojo">TOMAS LA PASTILLA ROJA... Y TE ENSEÑARÉ QUÉ TAN PROFUNDO LLEGA EL AGUJERO DE TUS DATOS. LA VERDAD ABSOLUTA SOBRE TU MÚSICA.</div>', unsafe_allow_html=True)
