@@ -115,10 +115,15 @@ def mostrar_pantalla_carga():
         
         st.markdown(f"""
         <style>
+        div[data-testid="stAlert"] {{
+            max-width: 600px;
+            margin: 0 auto;
+        }}
+        
         .contenedor-chef {{
             display:flex;
             justify-content:center;
-            margin-top:40px;
+            margin-top:20px;
         }}
             
         .escena {{
@@ -128,6 +133,8 @@ def mostrar_pantalla_carga():
 
         .chef {{
             width:100%;
+            transform: scale(1.3) translateY(10px);
+            
         }}
 
         .plato {{
@@ -135,7 +142,7 @@ def mostrar_pantalla_carga():
             bottom:0;
             left:50%;
             transform:translateX(-50%);
-            width:70%;
+            width:80%;
         }}
 
         .boton-overlay {{
@@ -143,13 +150,13 @@ def mostrar_pantalla_carga():
             bottom:35px;
             left:50%;
             transform:translateX(-50%);
-        width:60%;
+            width:60%;
         }}
 
         .boton-overlay button {{
             width:100%;
             padding:10px;
-            border:none;
+            border: none;
             border-radius:20px;
             background:linear-gradient(45deg,#8a2be2,#a855f7);
             color:white;
@@ -170,18 +177,50 @@ def mostrar_pantalla_carga():
         st.markdown("""
         <style>
         div[data-testid="stButton"] {
-            margin-top: -90px;
-            margin-left: 230px;
+            margin-top: -100px;
+            margin-left: 232px;
             display: flex;
             justify-content: center;
         }
         
         div[data-testid="stButton"] button {
             width: 220px !important;
+            background: linear-gradient(135deg, #1DB954, #1ed760) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-family: 'Press Start 2P', cursive !important;
             padding: 10px;
-            box-shadow: 0 0 25px rgba(168,85,247,0.8);
-            border-radius: 20px;
+            box-shadow:
+                0 0 15px rgba(29, 185, 84, 0.6),
+                0 0 30px rgba(29, 185, 84, 0.4),
+                0 8px 20px rgba(0,0,0,0.6);
+            font-size: 10px !important;
+            transition: all 0.3s ease !important;
+            animation: glowPulse 2s infinite alternate;
         }
+        div[data-testid="stButton"] button:hover {
+            transform: scale(1.08);
+            filter: brightness(1.2);
+            box-shadow: 
+                0 0 25px rgba(29, 185, 84, 0.9),
+                0 0 50px rgba(29, 185, 84, 0.6),
+                0 10px 25px rgba(0,0,0,0.7);
+        }
+        
+        @keyframes glowPulse {
+            from { 
+                box-shadow: 
+                    0 0 10px rgba(29,185,84,0.4),
+                    0 5px 15px rgba(0,0,0,0.5);
+            }
+            to { 
+                box-shadow: 
+                    0 0 35px rgba(29,185,84,0.9),
+                    0 10px 25px rgba(0,0,0,0.7);
+            }
+        }
+        
         </style>
         """, unsafe_allow_html=True)
         with col2:

@@ -56,7 +56,10 @@ def mostrar_dashboardoauth():
     }}
 
     .pibble-cashier {{
-    width: clamp(150px, 18vw, 250px);
+    position: absolute;
+    left: 26%;
+    bottom: 0;
+    width: clamp(220px, 30vw, 400px) !important;
     }}
 
     .contenedor-recibo {{

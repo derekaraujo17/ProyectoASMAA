@@ -32,15 +32,20 @@
     font-family: 'Press Start 2P', cursive;
     font-size: 10px;
     color: white;
-    background: linear-gradient(135deg, #8a2be2, #a855f7);
+    background: linear-gradient(135deg, #1DB954, #1ed760);
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.7);
-    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+    transition: all 0.3s ease;
 }
 
 #btn-resultados:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(168, 85, 247, 1);
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 10px rgba(29,185,84,0.4); }
+    to   { box-shadow: 0 0 30px rgba(29,185,84,0.9); }
+    }

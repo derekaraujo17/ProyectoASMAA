@@ -22,14 +22,7 @@
 
 .titulo-carga {
     color: #1db954 !important;
-    font-size: 32px !important;
+    font-size: 24px !important;
     margin: 0 0 10px 0 !important;
     font-weight: bold !important;
-}
-
-.subtitulo-carga {
-    color: #ffffff !important;
-    opacity: 0.8 !important;
-    font-size: 18px !important;
-    margin: 0 !important;
 }
