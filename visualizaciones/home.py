@@ -9,7 +9,7 @@ from visualizaciones.helpers import leer_externos, obtener_imagen_base64
 spotifyOauth=SpotifyOAuth(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-    redirect_uri=("SPOTIFY_REDIRECT_URI","http://127.0.0.1:8501"),
+    redirect_uri=("https://spibblepy.streamlit.app","http://127.0.0.1:8501"),
     scope="user-top-read user-read-recently-played",
     cache_handler=MemoryCacheHandler()
 )
@@ -98,7 +98,7 @@ def mostrar_pantalla_pibble():
         width="100%"
         style="height: 800px; min-height: 700px; border:none; background:transparent; overflow:hidden;"
         scrolling="no"
-        sandbox="allow-scripts allow-same-origin allow-top-navigation"
+        sandbox="allow-scripts allow-same-origin allow pop-popups allow-popups-to-scape-sandbox"
         ></iframe>'''
         st.markdown(iframeCode, unsafe_allow_html=True)    
     except:
