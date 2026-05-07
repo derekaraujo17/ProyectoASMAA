@@ -9,7 +9,7 @@ from visualizaciones.helpers import leer_externos, obtener_imagen_base64
 spotifyOauth=SpotifyOAuth(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-    redirect_uri="http://127.0.0.1:8501",
+    redirect_uri=("SPOTIFY_REDIRECT_URI","http://127.0.0.1:8501"),
     scope="user-top-read user-read-recently-played",
     cache_handler=MemoryCacheHandler()
 )
