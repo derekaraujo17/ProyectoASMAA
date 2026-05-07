@@ -108,18 +108,14 @@ def mostrar_pantalla_carga():
                     st.error(f"Error: {e}")
     else:
         render_header()
-        
-        # 1. Inyectamos el CSS
         try:
             codigoCss = leer_externos("frontend/animacionCarga/carga.css")
             st.markdown(f"<style>{codigoCss}</style>", unsafe_allow_html=True)
         except FileNotFoundError:
             pass
         
-        # 2. El mensaje de éxito
         st.success("¡Pibble terminó de cocinar!")
         
-        # 3. Cargamos las imágenes
         chef_b64 = obtener_imagen_base64("frontend/assets/pibble_chef.png")
         plato_b64 = obtener_imagen_base64("frontend/assets/plato.png")
         
@@ -132,18 +128,14 @@ def mostrar_pantalla_carga():
         </div>
         """
         
-        # 4. Ajustamos las columnas principales
         col1, col2, col3 = st.columns([1, 2, 1])
         
         with col2:
-            # 5. Imprimimos el Chef y el Plato
             st.markdown(html_final, unsafe_allow_html=True)
             
-            # 6. ¡LA SOLUCIÓN NATIVA! Sub-columnas para atrapar el botón al centro
             col_b1, col_b2, col_b3 = st.columns([1, 1.5, 1])
             
             with col_b2:
-                # Le devolvemos el use_container_width=True porque ahora está en una columna delgada
                 if st.button("SERVIR RESULTADOS", use_container_width=True):
                     if st.session_state["motor"] == "motorjson":
                         st.session_state["pantalla_actual"] = "dashboardjson"

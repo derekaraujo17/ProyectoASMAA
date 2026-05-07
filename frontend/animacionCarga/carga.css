@@ -1,6 +1,3 @@
-/* =========================================
-   PANTALLA DE CARGA (GIF ANIMADO)
-   ========================================= */
 .contenedor-pantalla-carga {
     position: fixed !important; 
     top: 0 !important;
@@ -30,10 +27,6 @@
     font-weight: bold !important;
 }
 
-/* =========================================
-   ESTILIZACIÓN DEL st.success NATIVO
-   ========================================= */
-/* Cambiamos la caja nativa de alerta de Streamlit */
 div[data-testid="stAlert"] {
     background-color: rgba(29, 185, 84, 0.15) !important; 
     border: 1px solid #1DB954 !important; 
@@ -46,7 +39,6 @@ div[data-testid="stAlert"] {
     justify-content: center !important;
 }
 
-/* Cambiamos el texto dentro del st.success nativo */
 div[data-testid="stAlert"] p {
     color: #ffffff !important;
     font-size: 18px !important;
@@ -55,9 +47,6 @@ div[data-testid="stAlert"] p {
     font-weight: bold !important;
 }
 
-/* =========================================
-   ESCENA FINAL: CHEF PIBBLE
-   ========================================= */
 .contenedor-chef {
     display: flex;
     flex-direction: column;
@@ -87,11 +76,7 @@ div[data-testid="stAlert"] p {
     z-index: 2;
 }
 
-/* =========================================
-   MAGIA DEL BOTÓN DE STREAMLIT
-   ========================================= */
 div[data-testid="stButton"] {
-    /* Solo jalamos el botón hacia arriba, Python ya lo centró */
     margin-top: -70px !important; 
     position: relative !important;
     z-index: 3 !important;
