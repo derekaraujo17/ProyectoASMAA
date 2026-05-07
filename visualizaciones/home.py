@@ -98,7 +98,7 @@ def mostrar_pantalla_pibble():
         width="100%"
         style="height: 800px; min-height: 700px; border:none; background:transparent; overflow:hidden;"
         scrolling="no"
-        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-scape-sandbox allow-top-navigation allow-top-navigation-by-user-activation"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation"
         ></iframe>'''
         st.markdown(iframeCode, unsafe_allow_html=True)    
     except:
