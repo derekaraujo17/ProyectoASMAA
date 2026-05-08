@@ -275,8 +275,7 @@ def mostrar_dashboardjson():
             
             st.markdown("<h2 class='slide-completo-titulo' style='margint-top:60px;'>Tus semanas de este mes</h2>",unsafe_allow_html=True)
             artistasSemanaMes = dfArtistasSemanal[dfArtistasSemanal["añoMesReproduccion"]==mes]
-            semanasDelMes = artistasSemanaMes["semanaReproduccion"].unique()
-            semanasDelMes.sort()
+            semanasDelMes = sorted(artistasSemanaMes["semanaReproduccion"].unique())
             columnasSemanas = st.columns(min(3, len(semanasDelMes)))
             for index, semana in enumerate(semanasDelMes):
                 añoIso, numSemanaIso = semana.split('-')
