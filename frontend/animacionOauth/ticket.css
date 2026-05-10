@@ -4,7 +4,7 @@
 .contenedor-recibo {
     width: 350px;
     padding: 30px 20px 40px 20px;
-    margin: 40px auto; 
+    margin: 40px 0; 
     
     font-family: 'Space Mono', monospace;
     text-transform: uppercase;
@@ -120,4 +120,17 @@
     margin: 10px 0 0 0;
     font-weight: 400;
     opacity: 0.8;
+}
+
+.contenedor-ticket {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.pibble-cashier {
+    width: 220px;
+    transform: scale(1.1);
 }

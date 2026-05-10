@@ -16,8 +16,8 @@ def mostrar_dashboardoauth():
         cssGlobal = leer_externos("frontend/estilosGlobales.css")
         moldeHtml = leer_externos("frontend/animacionOauth/ticket.html")
         codigoCss = leer_externos("frontend/animacionOauth/ticket.css")
-        st.markdown(f"<style>{cssGlobal}</style>",unsafe_allow_html=True)
-        st.markdown(f"<style>{codigoCss}</style>",unsafe_allow_html=True)
+        st.markdown(f"<style>{cssGlobal}</style>", unsafe_allow_html=True)
+        st.markdown(f"<style>{codigoCss}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
         st.warning("Esperando archivos frontend")
         return
@@ -44,29 +44,7 @@ def mostrar_dashboardoauth():
     htmlFinal = htmlFinal.replace('\n', '')
     
     pibbleCashier = obtener_imagen_base64("frontend/assets/pibble_cashier.png")
-    
     st.markdown(f"""
-    <style>
-    .contenedor-ticket {{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        flex-wrap: wrap;
-    }}
-
-    .pibble-cashier {{
-    position: absolute;
-    left: 26%;
-    bottom: 0;
-    width: clamp(220px, 30vw, 400px) !important;
-    }}
-
-    .contenedor-recibo {{
-        margin: 0 !important;
-    }}
-    </style>
-
     <div class="contenedor-ticket">
         <img src="{pibbleCashier}" class="pibble-cashier">
         {htmlFinal}
