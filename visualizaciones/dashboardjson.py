@@ -34,10 +34,14 @@ def obtener_pibble_base64(nombreArtista, generoArtista):
 def mostrar_dashboardjson():
     render_header()
     rutaCssGlobal = "frontend/estilosGlobales.css"
+    rutaCssDiapositivas = "frontend/animacionJson/diapositiva.css"
+    
     try:
         with open(rutaCssGlobal, "r", encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True) 
     except FileNotFoundError:
+        with open(rutaCssDiapositivas, "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
         pass  
     resultados = st.session_state.get("resultados",None)
 

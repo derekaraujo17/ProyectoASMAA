@@ -1,5 +1,32 @@
 /*PARTE 1: DIAPOSITIVAS INDIVIDUALES (Pasos 1 al 4)*/
 /* Contenedor principal que centra todo en la pantalla */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.slide-contenedor,
+.slide-completo,
+.slide-semanal,
+.slide-contenedor-tarjeta,
+.slide-lista,
+.elemento-lista,
+.slide-titulo,
+.slide-subtitulo,
+.slide-subtitulo2,
+.slide-extra,
+.slide-completo-titulo,
+.slide-completo-subtitulo,
+.slide-mensaje,
+.slide-mensaje-destacado,
+.slide-dato-extra,
+.nombre-cancion,
+.nombre-artista,
+.minutos-artista,
+.minutos-texto,
+.semana-titulo,
+.semana-fechas,
+.semana-fechas-grandes {
+    font-family: 'Press Start 2P', cursive !important;
+}
+
 .slide-contenedor {
     display: flex !important;
     flex-direction: column !important;
