@@ -169,7 +169,7 @@ def mostrar_dashboardjson():
                 moldeSlide = f.read()
             tiempoMes = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]
             minutosTotales = tiempoMes["minutosReproducidos"].iloc[0] if not tiempoMes.empty else 0
-            diasTotales = round(minutosTotales/1440,1)
+            diasTotales = round((minutosTotales/1440)*7,1)
             slideActual = moldeSlide.replace("{{MINUTOS_TOTALES}}",str(minutosTotales))
             slideActual = slideActual.replace("{{DIAS_TOTALES}}",str(diasTotales))
             st.markdown(slideActual, unsafe_allow_html=True)
