@@ -40,13 +40,10 @@ def mostrar_pantalla_carga():
         contenedorAnimacion = st.empty()
 
         rutasGifs = {
-            1: "frontend/animacionCarga/links/pibble_edn.gif",
-            2: "frontend/animacionCarga/links/starkirk.gif",
-            3: "frontend/animacionCarga/links/tuff.gif",
-            4: "frontend/animacionCarga/links/pibble_edn.gif",
-            5: "frontend/animacionCarga/links/starkirk.gif",
-            6: "frontend/animacionCarga/links/pibble_edn.gif",
-            7: "frontend/animacionCarga/links/tuff.gif"
+            1: "frontend/animacionCarga/links/pibble_ola.gif",
+            2: "frontend/animacionCarga/links/pibble_dormido.gif",
+            3: "frontend/animacionCarga/links/pibble_columpio.gif",
+            4: "frontend/animacionCarga/links/pibblewash.gif"
         }
 
         rutaGifElegida = rutasGifs.get(numero, rutasGifs[1])
