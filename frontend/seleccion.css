@@ -44,6 +44,26 @@
     display: block !important;
 }
 
+/* =========================================
+   ESTILOS DE LA ZONA DE DRAG & DROP
+   ========================================= */
+
+/* 1. LA CURA PARA EL TEXTO FANTASMA: Proteger los iconos de Streamlit */
+.stIconMaterial, [data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Rounded', sans-serif !important;
+}
+
+/* Ocultar el ícono de la nube para que solo quede tu botón limpio */
+[data-testid="stFileUploadDropzone"] .stIconMaterial {
+    display: none !important;
+}
+
+/* 2. CONTENEDOR PRINCIPAL DEL UPLOADER */
+[data-testid="stFileUploader"] {
+    max-width: 100% !important;
+    overflow-x: hidden !important; /* Cortar cualquier desborde horizontal */
+}
+
 [data-testid="stFileUploadDropzone"],
 [data-testid="stFileUploaderDropzone"],
 [data-testid="stFileUploader"] > section {
@@ -55,14 +75,7 @@
     height: auto !important; 
     transition: 0.3s;
     width: 100% !important; 
-}
-
-[data-testid="stFileUploadDropzone"] span,
-[data-testid="stFileUploaderDropzone"] span,
-[data-testid="stFileUploadDropzone"] small,
-[data-testid="stFileUploaderDropzone"] small {
-    font-size: 9px !important; 
-    line-height: 1.8 !important;
+    box-sizing: border-box !important;
 }
 
 [data-testid="stFileUploadDropzone"]:hover,
@@ -73,42 +86,42 @@
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important;
 }
 
-[data-testid="stFileUploadDropzone"] svg {
-    display: none !important;
-}
-[data-testid="stFileUploadDropzone"]::before, 
-[data-testid="stFileUploadDropzone"]::after {
-    content: '' !important;
-    display: none !important;
-}
-[data-testid="stFileUploadDropzone"] button {
-    padding: 5px 15px !important; 
-}
-
-[data-testid="stFileUploadDropzone"] + div {
-    max-height: 130px !important; 
+/* 3. LISTA DE ARCHIVOS - Hacerla scrollable verticalmente y contenida */
+[data-testid="stFileUploader"] > div:last-child {
+    max-height: 120px !important; /* Altura máxima antes de hacer scroll */
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    scrollbar-width: thin;
-    scrollbar-color: #ff4b4b transparent; 
-}
-
-[data-testid="stUploadedFile"] {
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    max-width: 100% !important;
     padding-right: 5px !important;
+    scrollbar-width: thin;
+    scrollbar-color: #ff4b4b transparent;
 }
 
-[data-testid="stUploadedFile"] span {
+/* Cada caja de archivo individual */
+[data-testid="stUploadedFile"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    margin-bottom: 5px !important;
+}
+
+/* Textos dentro de los archivos (truncados con '...') */
+[data-testid="stUploadedFile"] span,
+[data-testid="stUploadedFile"] p,
+[data-testid="stUploadedFile"] small,
+[data-testid="stFileUploadDropzone"] small {
     font-size: 8px !important; 
-    max-width: 160px !important; 
-    display: inline-block;
+    max-width: 90% !important;
+    white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+    display: inline-block !important;
 }
 
+
+/* =========================================
+   ESTILOS DE LOS BOTONES (PASTILLAS)
+   ========================================= */
 [data-testid="stHorizontalBlock"] > div:nth-child(1) button {
     background: radial-gradient(circle, #ff1111 0%, #770000 100%) !important;
     border: 2px solid #ffffff !important;
