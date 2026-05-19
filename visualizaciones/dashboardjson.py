@@ -196,15 +196,19 @@ def mostrar_dashboardjson():
             cancionesDelMes = top5Canciones[top5Canciones["añoMesReproduccion"]==mes]
             htmlListaCanciones = ""
             for index, fila in cancionesDelMes.iterrows():
-                urlCancion = fila["urlPortada"]
+                urlCancion = obtener_imagen_base64("frontend/assets/sin_imagen_cancion.png") if fila["urlPortada"] == "sin imagen" else fila["urlPortada"]
+                
                 nombreCancion = fila["trackName"]
                 nombreArtista = fila["artistName"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlCancion}"><p class="nombre-cancion">{nombreCancion} de {nombreArtista}</p></li>'
                 htmlListaCanciones += elementoLi
+                
             artistasDelMes = top5Artistas[top5Artistas["añoMesReproduccion"]==mes]
             htmlListaArtistas = ""
+            
             for index, fila in artistasDelMes.iterrows():
-                urlArtista = fila["urlFoto"]
+                urlArtista = obtener_imagen_base64("frontend/assets/sin_imagen_artista.png") if fila["urlFoto"] == "sin imagen" else fila["urlFoto"]
+                
                 nombreArtista = fila["artistName"]
                 minutos = fila["minutosReproducidos"]
                 elementoLi = f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlArtista}"><p class="nombre-artista">{nombreArtista} con un total de <span class="minutos-artista">{minutos}</span> minutos</p></li>'
@@ -305,7 +309,8 @@ def mostrar_dashboardjson():
                 top3Semana = artistasSemanaMes[artistasSemanaMes["semanaReproduccion"]==semana]
                 htmlFotos = ""
                 for url in top3Semana["urlFoto"]:
-                    htmlFotos += f'<img src="{url}" class="foto-semana">'
+                    urlSegura = obtener_imagen_base64("frontend/assets/sin_imagen_artista.png") if url == "sin imagen" else url
+                    htmlFotos += f'<img src="{urlSegura}" class="foto-semana">'
                 tarjetaSemana = f"""
                 <div class="contenedor-semana">
                 <div class="semana-titulo">Semana {index+1}</div>
@@ -342,19 +347,21 @@ def mostrar_dashboardjson():
             strFin = f"{fechaFinSemana.day} {mesesEspañolAbrev[fechaFinSemana.month-1]}"
             rangoFechas = f"{strInicio} al {strFin}"            
             htmlListaArtistas = ""
+            htmlListaArtistas = ""
             for index, fila in artistasSemana.head(3).iterrows():
-                urlFoto = fila["urlFoto"]
+                urlFoto = obtener_imagen_base64("frontend/assets/sin_imagen_artista.png") if fila["urlFoto"] == "sin imagen" else fila["urlFoto"]
+                
                 nombreArtista = fila["artistName"]
                 minutos = fila["totalMinutosArt"]
                 htmlListaArtistas += f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlFoto}"><p class="nombre-artista">{nombreArtista} <br><span class="minutos-artista">{minutos:,} min</span></p></li>'
                 
             htmlListaCanciones = ""
             for index, fila in cancionesSemana.head(3).iterrows():
-                urlPortada = fila["urlPortada"]
+                urlPortada = obtener_imagen_base64("frontend/assets/sin_imagen_cancion.png") if fila["urlPortada"] == "sin imagen" else fila["urlPortada"]
+                
                 nombreCancion = fila["trackName"]
                 nombreArtista = fila["artistName"]
                 htmlListaCanciones += f'<li class="elemento-lista"><img class="slide-completo-lista" src="{urlPortada}"><p class="nombre-cancion">{nombreCancion} <br><span style="font-size: 14px; opacity: 0.7;">de {nombreArtista}</span></p></li>'
-                
             minutosTotales = datosTiempo["totalMinutosSem"].iloc[0] if not datosTiempo.empty else 0
             
             cancionesTotales = datosTiempo["cantidadEscuchasSem"].iloc[0] if not datosTiempo.empty else 0 
