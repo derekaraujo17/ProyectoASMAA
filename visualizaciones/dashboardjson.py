@@ -138,7 +138,7 @@ def mostrar_dashboardjson():
                 moldeSlide = f.read()
             artistasMes = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]
             nombreArtista = artistasMes["artistName"].iloc[0] if not artistasMes.empty else "Desconocido"
-            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin_imagen_artista.png"
+            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "pibble_generico.png"
             generoArtista = artistasMes["vibraArtista"].iloc[0] if not artistasMes.empty else "🎶"
             imagenPibble = obtener_pibble_base64(nombreArtista, generoArtista)
             minutosArtista = artistasMes["minutosReproducidos"].iloc[0] if not artistasMes.empty else 0
