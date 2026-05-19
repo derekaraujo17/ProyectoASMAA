@@ -7,6 +7,7 @@ import base64
 import random
 from logica.motorjson import diccionarioVibras
 from datetime import datetime, timedelta
+from visualizaciones.helpers import obtener_imagen_base64
 
 def limpiar_nombre_pibble(nombrePibble):
     nombreLimpio = ''.join((c for c in unicodedata.normalize('NFD', nombrePibble) if unicodedata.category(c) != 'Mn'))
@@ -81,8 +82,18 @@ def mostrar_dashboardjson():
             artistasMes = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]
             feelingMes = resumenFeeling[resumenFeeling["añoMesReproduccion"]==mes]
             tiempoMes = dfTiempoMensual[dfTiempoMensual["añoMesReproduccion"]==mes]
-            urlCancion = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin_imagen_cancion.png"
-            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin_imagen_artista.png"
+            valor_cancion = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin imagen"
+            valor_artista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin imagen"
+
+            if valor_cancion == "sin imagen":
+                urlCancion = obtener_imagen_base64("frontend/assets/sin_imagen_cancion.png") 
+            else:
+                urlCancion = valor_cancion
+
+            if valor_artista == "sin imagen":
+                urlArtista = obtener_imagen_base64("frontend/assets/sin_imagen_artista.png") 
+            else:
+                urlArtista = valor_artista
             emojiVibra = feelingMes["emoji"].iloc[0] if not feelingMes.empty else "🎶"
             porcentaje = tiempoMes["porcentajeReloj"].iloc[0] if not tiempoMes.empty else 0
             minutos = tiempoMes["minutosReproducidos"].iloc[0] if not tiempoMes.empty else 0
@@ -120,7 +131,8 @@ def mostrar_dashboardjson():
             with open(rutaHtmlDiapositiva1, "r", encoding="utf-8") as f:
                 moldeSlide = f.read()
             cancionesMes = cancionesTop1[cancionesTop1["añoMesReproduccion"]==mes]
-            urlCancion1 = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin_imagen_cancion.png"
+            valor_cancion1 = cancionesMes["urlPortada"].iloc[0] if not cancionesMes.empty else "sin imagen"
+            urlCancion1 = obtener_imagen_base64("frontend/assets/sin_imagen_cancion.png") if valor_cancion1 == "sin imagen" else valor_cancion1
             nombreCancion1 = cancionesMes["trackName"].iloc[0] if not cancionesMes.empty else "Desconocido"
             nombreArtista1 = cancionesMes["artistName"].iloc[0] if not cancionesMes.empty else "Desconocido"
             escuchas = cancionesMes["cantidadEscuchas"].iloc[0] if not cancionesMes.empty else 0
@@ -138,7 +150,8 @@ def mostrar_dashboardjson():
                 moldeSlide = f.read()
             artistasMes = artistasTop1[artistasTop1["añoMesReproduccion"]==mes]
             nombreArtista = artistasMes["artistName"].iloc[0] if not artistasMes.empty else "Desconocido"
-            urlArtista = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "pibble_generico.png"
+            valor_artista2 = artistasMes["urlFoto"].iloc[0] if not artistasMes.empty else "sin imagen"
+            urlArtista = obtener_imagen_base64("frontend/assets/sin_imagen_artista.png") if valor_artista2 == "sin imagen" else valor_artista2
             generoArtista = artistasMes["vibraArtista"].iloc[0] if not artistasMes.empty else "🎶"
             imagenPibble = obtener_pibble_base64(nombreArtista, generoArtista)
             minutosArtista = artistasMes["minutosReproducidos"].iloc[0] if not artistasMes.empty else 0
